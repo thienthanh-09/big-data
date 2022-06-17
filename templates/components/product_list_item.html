@@ -1,0 +1,83 @@
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load get_params %}
+<div class="row p-2 border-top rounded product-list-item" item-url="{{item.get_absolute_url}}" role="button">
+    <div class="col-md-12 col-lg-3 d-flex align-items-center position-relative">
+        <img src="{{item.thumbnail.url}}" class="w-100 product-thumbnail" style="object-fit: contain;" alt="">
+        <div class="position-absolute top-0 start-0">
+            {% if item.sell_price < item.price %}
+                {% if item.sale.sale_type == 'F' %}
+                <span class="badge bg-danger">{% trans 'Sale' %} ${{item.sale.value}}</span>
+                {% else %}
+                <span class="badge bg-danger">{% trans 'Sale' %} {{item.sale.value}}%</span>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-9">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row">
+                    <span class="col-auto text-uppercase text-muted text-truncate fs-6">{% trans item.category.name %}</span>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col-auto">
+                        <div class="container m-0 p-0">
+                        {% with ''|center:5 as range %}
+                        {% for _ in range %}
+                            {% if forloop.counter <= item.rating %}
+                            <i class="fa-solid fa-star fa-2xs text-warning"></i>
+                            {% else %}
+                            <i class="fa fa-star-o fa-2xs" aria-hidden="true"></i>
+                            {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <a class="col-auto fw-bold text-decoration-none" href="{{item.get_absolute_url}}">
+                        {{item.name}}
+                    </a>
+                </div>
+                <div class="row my-2 text-muted">
+                    <p>
+                        {{item.preview_description}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row justify-content-center">
+                    <span class="price-hover fw-bold col-auto" item-value="{{item.sell_price}}">
+                        {% if item.sale.valid and item.sale.price < item.price %}
+                        <span class="text-decoration-line-through text-danger">${{item.price|intcomma}}</span>
+                        <span class="text-dark" id="new-price">${{item.sale.price|intcomma}}</span>
+                        {% else %}
+                            ${{item.price|intcomma}}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="row my-3 justify-content-center">
+                    <button type="button" class="col-auto text-light rounded-3 btn btn-orange text-uppercase add-to-cart-btn" product-id="{{item.id}}">{% trans 'Add to cart' %}</button>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-auto m-1">
+                        <div class="d-flex justify-content-center align-items-center rounded-circle action-container view-product-btn" product-id="{{item.id}}">
+                            <i class="fa fa-eye" aria-hidden="true"></i>    
+                        </div>
+                    </div>
+                    <div class="col-auto m-1">
+                        <div class="d-flex justify-content-center align-items-center rounded-circle action-container like-product-btn" data-fav="{{item.favorited}}" product-id={{item.id}}>
+                            {% if item.favorited %}
+                            <i class="fa fa-heart text-danger" aria-hidden="true"></i>
+                            {% else %}
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

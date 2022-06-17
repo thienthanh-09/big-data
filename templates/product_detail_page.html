@@ -1,0 +1,318 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/products_page.css' %}">
+<link rel="stylesheet" href="{% static 'css/product_card.css' %}">
+{% endblock %}
+{% block content %}
+{% csrf_token %}
+<div class="mx-5 my-2 p-5">
+    <div class="container">
+        <div class="row m-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="/">{% trans 'Store' %}</a></li>
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'products' %}?category={{object.category.id}}">{% trans object.category.name %}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{object.name}}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-6 text-center">
+                <div id="thumbnail-carousel" class="carousel carousel-dark slide sticky-top" data-bs-interval="false">
+                    <div class="carousel-inner product-carousel">
+                        <div class="carousel-item active">
+                            <div class="d-block w-100 container">
+                                <img src="{{object.thumbnail}}" class="product-carousel-item product-img">
+                            </div>
+                        </div>
+                        {% for item in images %}
+                        <div class="carousel-item">
+                            <div class="d-block w-100 container">
+                                <img src={{item.image}} class="product-carousel-item product-img">
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% for item in videos %}
+                        <div class="carousel-item">
+                            <div class="d-block w-100 container">
+                                <video class="product-carousel-item" controls>
+                                    <source src="{{item.video.url}}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#thumbnail-carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#thumbnail-carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <span class="fw-bold fs-4">{{object.name}}</span>
+                </div>
+                <div class="row">
+                    <span class="col-auto price-hover fw-bold" item-value="{{object.sell_price}}">
+                        {% if object.sale.valid and object.sale.price < object.price %}
+                        <span class="text-decoration-line-through text-danger">${{object.price|intcomma}}</span>
+                        <span class="fs-2 text-primary" id="new-price">${{object.sale.price|intcomma}}</span>
+                        {% else %}
+                            <span class="fs-2 text-primary">${{object.price|intcomma}}</span>
+                        {% endif %}
+                    </span>
+                    {% if object.sale.valid and object.sale.price < object.price %}
+                        <span class="col-auto d-flex align-items-center" id="time-countdown" data-expired="{{object.sale.expired_at|date:'c'}}"></span>
+                    {% endif %}
+                </div>
+                <div class="row justify-content-start mb-4">
+                    <div class="col-auto">
+                        <div class="container m-0 p-0">
+                        {% with ''|center:5 as range %}
+                        {% for _ in range %}
+                            {% if forloop.counter <= object.rating %}
+                            <i class="fa-solid fa-star fa-2xs text-warning"></i>
+                            {% else %}
+                            <i class="fa fa-star-o fa-2xs" aria-hidden="true"></i>
+                            {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        </div>
+                    </div>
+                    <span class="col-auto text-primary">{{object.rating_count}} {% trans 'review(s)' %}</span>
+                </div>
+                <div class="row justify-content-between" id="add-cart-div">
+                    <div class="col-auto">
+                        <div class="row align-items-center">
+                            <a class="col-auto text-decoration-none" href="{{object.store.get_absolute_url}}">{% trans 'Visit' %} {{object.store.name}}</a>
+                        </div>
+                    </div>
+                    <span class="col-auto text-primary" id="start-chat-btn" data-store="{{object.store.id}}" role="button"><i class="fa-solid fa-message"></i> {% trans 'Chat now' %}</span>
+                </div>
+                <div class="row my-5 p-2">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-primary decrease-qty-btn">
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input class="form-control text-center qty-input" value="1" id="quantity">
+                            <button type="button" class="btn btn-primary increase-qty-btn">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="btn-group w-100" role="button">
+                            <button type="button" class="btn btn-primary fw-bold add-cart" item-id="{{object.id}}">
+                                <i class="fa-solid fa-cart-shopping text-warning"></i>
+                                {% trans 'Add to Cart' %}
+                            </button>    
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-auto">
+                        <span class="fw-bold {% if liked %}text-danger{% endif %}" role="button" id="like-product-btn" product-id="{{object.id}}">
+                            <i class="fa {% if liked %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
+                            <span id="fav_text">{% if liked %}{% trans 'Remove from Favorited products' %}{% else %}{% trans 'Add to Favorited products' %}{% endif %}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="row my-3">
+                        <span class="fw-bold text-uppercase"></span>
+                    </div>
+                    
+                </div>
+                <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                        <button class="accordion-button text-uppercase fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            {% trans 'Description' %}
+                        </button>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <p>{{object.description}}</p>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-button text-uppercase fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                            {% trans 'Additional infomation' %}
+                        </button>
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <span class="fs-6 text-uppercase text-muted">{% trans 'Remaining quantity' %}</span>: <span class="fs-2 text-orange">{% if object.quantity > 99 %} 99+ {% else %} {{object.quantity}} {% endif %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-button text-uppercase fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                            {% trans 'Reviews' %}
+                        </button>
+                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                        <div class="accordion-body">
+                            <span class="text-uppercase fw-bold">{% trans 'Customer reviews' %}</span>
+                            <div class="row justify-content-between mb-5">
+                                {% if not object_list %}
+                                <span class="col-auto text-muted">{% trans 'No reviews yet' %}</span>
+                                {% else %}
+                                <div class="col-auto">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <div class="container m-0 p-0">
+                                                {% with ''|center:5 as range %}
+                                                {% for _ in range %}
+                                                    {% if forloop.counter <= object.rating %}
+                                                    <i class="fa-solid fa-star fa-2xs text-warning"></i>
+                                                    {% else %}
+                                                    <i class="fa fa-star-o fa-2xs" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% endwith %}
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span class="text-muted">{% blocktrans with count=object.rating_count %}Based on {{count}} review(s){% endblocktrans %}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if can_comment %}
+                                <span class="col-auto text-primary fw-bold" id="write-review-btn" role="button"><i class="fa fa-plus" aria-hidden="true"></i> {% trans 'Write a review' %}</span>
+                                {% endif %}
+                            </div>
+                            <div class="row my-5" id="review-session" hidden>
+                                {% csrf_token %}
+                                <span class="text-uppercase fw-bold">{% trans 'Write a review' %}</span>
+                                <div class="my-2">
+                                    <label class="fw-bold text-uppercase form-label">{% trans 'Rating' %}</label>
+                                    <div class="row p-0">
+                                        <div class="container">
+                                            <i class="fa-solid fa-star rating-star text-warning" role="button"></i>
+                                            <i class="fa-solid fa-star rating-star text-warning" role="button"></i>
+                                            <i class="fa-solid fa-star rating-star text-warning" role="button"></i>
+                                            <i class="fa-solid fa-star rating-star text-warning" role="button"></i>
+                                            <i class="fa-regular fa-star rating-star text-warning" role="button"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-2">
+                                    <label class="fw-bold text-uppercase form-label">{% trans 'Review' %}</label>
+                                    <input class="form-control" id="comment-input">
+                                </div>
+                                <div class="my-2">
+                                    <button type="button" class="px-4 btn btn-primary text-uppercase fw-bold" id="comment-btn" product-id="{{object.id}}">{% trans 'Submit review' %}</button>
+                                </div>
+                            </div>
+                            {% for comment in object_list %}
+                                <div class="row mt-2">
+                                    <div class="col-md-8 border-top mx-auto mb-1"></div>
+                                    <div class="row justify-content-start mb-1">
+                                        <div class="col-auto">
+                                            <div class="container m-0 p-0">
+                                            {% with ''|center:5 as range %}
+                                            {% for _ in range %}
+                                                {% if forloop.counter <= comment.rate %}
+                                                <i class="fa-solid fa-star fa-2xs text-warning"></i>
+                                                {% else %}
+                                                <i class="fa fa-star-o fa-2xs" aria-hidden="true"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% endwith %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="col-auto text-truncate fw-bold pe-0">{{comment.user.username}}</span>
+                                        <span class="col-auto">
+                                            on {{comment.created_at|date:'d/m/Y'}}
+                                        </span>
+                                    </div>
+                                    <div class="row">
+                                        <p class="text-muted">{{comment.content}}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="container d-flex justify-content-center">
+                                {% include 'base/pagination.html' %}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} <div class="row justify-content-center p-2 mb-5 bg-secondary-light">
+    <a target="_blank" class="col-auto text-decoration-none" id="share-fb-btn" role="button">
+        <i class="text-dark fa fa-facebook fa-2x colored-primary-hover" aria-hidden="true"></i>
+    </a>
+    <div class="col-auto d-flex align-items-center">
+        <i class="fa fa-chain colored-primary-hover" id="share-url-btn" aria-hidden="true" role="button"></i>
+    </div>
+</div> {% endcomment %}
+<div class="mx-5 my-2 p-5">
+    <div class="container">
+        <div class="mb-5">
+            {% trans 'Related products' as title1 %}
+            {% include 'components/products_set.html' with id="related" title=title1 des=des1 products_set=related_products %}
+        </div>
+    </div>
+</div>
+<div class="fixed-bottom" id="fixed-cart">
+    <div class="row bg-dark text-light">
+        <div class="container">
+            <div class="row justify-content-center px-5 py-3">
+                <div class="col-lg-6 col-xl-4">
+                    <div class="row">
+                        <span class="col-md-12 text-truncate">{{object.name}}</span>
+                    </div>
+                    <div class="row">
+                        <span class="col-md-12 text-truncate text-warning fw-bold">${{object.sell_price}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xl-4 row">
+                    <div class="col-md-4">
+                        <div class="input-group row">
+                            <button type="button" class="col-4 btn btn-secondary decrease-qty-btn">
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input class="col-4 form-control text-center qty-input" value="1" id="quantity">
+                            <button type="button" class="col-4 btn btn-secondary increase-qty-btn">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="btn-group w-100" role="button">
+                            <button type="button" class="btn btn-primary fw-bold add-cart" item-id="{{object.id}}">
+                                <i class="fa-solid fa-cart-shopping text-warning"></i>
+                                {% trans 'Add to Cart' %}
+                            </button>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'components/image_viewer.html' %}
+{% include 'components/quick_modal.html' %}
+<script type="module" src="{% static 'js/product-detail.js' %}"></script>
+<script type="module" src="{% static 'js/product-card.js' %}"></script>
+{% endblock %}

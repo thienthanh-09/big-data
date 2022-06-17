@@ -1,0 +1,11 @@
+@import 'variables';
+
+.product-list-item {
+    .product-thumbnail {
+        height: 10rem;
+
+        @media screen and (min-width: $md) {
+            height: 15rem;
+        }
+    }
+}

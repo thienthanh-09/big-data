@@ -1,0 +1,35 @@
+@import 'variables';
+
+$carousel-height: 450px;
+
+.product-carousel{
+    width: 100%;
+    height: $carousel-height;
+}
+
+#thumbnail-carousel {
+    top: 100px;
+}
+
+.product-carousel-item{
+    width: 100%;
+    height: $carousel-height;
+    object-fit: contain;
+}
+
+#fixed-cart {
+    transition: opacity 1s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 3;
+}
+
+.number {
+    margin: 0 0.1rem;
+    padding: 0.1rem;
+}
+
+.number-frame {
+    background-color: black;
+    margin: 0 0.2rem;
+}

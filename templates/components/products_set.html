@@ -1,0 +1,46 @@
+{% load i18n %}
+<h5 class="text-center text-uppercase">{{title}}</h5>
+<div class="row text-center text-uppercase">
+    <b>{{des}}</b>
+</div>
+{% if products_set|length == 0 %}
+    <div class="row m-3">
+        <div class="row">
+            <span class="text-center text-uppercase fw-bold fs-2">{% trans 'Empty' %}</span>
+        </div>
+        <div class="row">
+            <span class="text-center text-muted">{% trans 'There are no products matching the selection' %}.</span>
+        </div>
+    </div>
+{% else %}
+<div class="row justify-content-end">
+    <button class="col-auto btn" type="button" data-bs-target="#{{id}}" data-bs-slide="prev"><i class="fa-solid fa-angle-left"></i></button>
+    <button class="col-auto btn" type="button" data-bs-target="#{{id}}" data-bs-slide="next"><i class="fa-solid fa-angle-right"></i></button>
+</div>
+<div class="container my-2">
+    <div id="{{id}}" class="carousel slide my-3" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="row">
+            {% if not products_set %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% for item in products_set %}
+                <div class="col-lg-3 my-1">
+                    {% include 'components/product_card.html' with item=item %}
+                </div>
+                {% if forloop.counter|divisibleby:4 or forloop.last %}
+                </div>
+            </div>
+                    {% if not forloop.last %}
+            <div class="carousel-item">
+                <div class="row">
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

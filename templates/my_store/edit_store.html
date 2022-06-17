@@ -1,0 +1,15 @@
+{% extends 'store_dashboard.html' %}
+{% load i18n %}
+{% load static %}
+{% block dashboard_item %}
+<div class="container">
+    <div class="text-uppercase text-center my-5 fs-2 fw-bold">{% trans 'Edit your store' %}</div>
+    <form method="post">{% csrf_token %}
+        {% include 'forms/store.html' %}
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary mx-1">{% trans 'Save' %}</button>
+            <a name="" id="" class="btn btn-danger mx-1" href="/me/store/" role="button">{% trans 'Cancel' %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

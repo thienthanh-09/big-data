@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+<div class="row">
+    <img src="{% static '' %}{{img_url}}" class="event-image">
+</div>
+<div class="row my-1">
+    <span class="fw-bold text-danger">{% trans 'Special Event' %}</span>
+</div>
+<div class="row">
+    <span class="fw-bold fs-3">{% trans title %}</span>
+</div>
+<div class="row">
+    <span class="text-muted">{% trans subtitle %}</span>
+</div>
+<div class="row">
+    <a class="text-decoration-none fw-bold text-primary" href="{% url 'products' %}">{% trans 'Buy now' %} &raquo;</a>
+</div>

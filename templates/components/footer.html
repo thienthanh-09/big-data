@@ -1,0 +1,115 @@
+{% load i18n %}
+{% load static %}
+<div class="row d-flex justify-content-center p-3 bg-orange">
+    <div class="col-sm-10">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-md-3 text-uppercase text-light">
+                {% trans 'Be in touch with us' %}
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="{% trans 'Enter your e-mail' %}">
+                    <button type="button" class="btn btn-dark">{% trans 'Join us' %}</button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row justify-content-center text-light social-icons">
+                    <div class="col-sm-auto">
+                        <a class="text-light text-decoration-none" href="https://www.facebook.com"><i class="fa fa-facebook" aria-hidden="true" role="button"></i></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a class="text-light text-decoration-none" href="https://www.twitter.com"><i class="fa fa-twitter" aria-hidden="true" role="button"></i></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a class="text-light text-decoration-none" href="https://www.youtube.com"><i class="fa fa-youtube" aria-hidden="true" role="button"></i></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a class="text-light text-decoration-none" href="https://www.instagram.com"><i class="fa fa-instagram" aria-hidden="true" role="button"></i></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a class="text-light text-decoration-none" href="https://www.pinterest.com"><i class="fa fa-pinterest" aria-hidden="true" role="button"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row py-5 border-top d-flex justify-content-center bg-light">
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-3 my-2 px-5">
+                <div class="row text-uppercase">
+                    <h5>{% trans 'Categories' %}</h5>
+                </div>
+                <div class="text-muted">
+                    {% for cat in categories %}
+                    <div class="row mt-1">
+                        <a class="text-decoration-none text-dark" href="{% url 'products' %}?category={{cat.id}}">{% trans cat.name %}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3 my-2 px-5">
+                <div class="row text-uppercase">
+                    <h5>{% trans 'Payment' %}</h5>
+                </div>
+                <div class="row text-muted">
+                    <div class="col-sm-auto">
+                        <i class="fa fa-cc-visa fa-3x" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-auto">
+                        <i class="fa fa-cc-mastercard fa-3x" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="row text-muted">
+                    <div class="col-sm-auto">
+                        <i class="fa fa-cc-paypal fa-3x" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-auto">
+                        <i class="fa fa-cc-discover fa-3x" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 my-2 px-5">
+                <div class="row text-uppercase">
+                    <h5>{% trans 'About' %}</h5>
+                </div>
+                <div class="text-muted">
+                    With the motto "All for Customers", We always strives to improve the quality of services and products, thereby bringing a complete shopping experience to customers with fast delivery service in 2 hours and the next day, with the same commitment to provide genuine products with a 111% refund policy if counterfeit goods are detected.
+                </div>
+            </div>
+            <div class="col-md-3 my-2 px-5">
+                <div class="row text-uppercase">
+                    <h5>{% trans 'Contact us' %}</h5>
+                </div>
+                <div class="text-muted">
+                    <div class="row">
+                        <span>
+                            <span class="text-uppercase">{% trans 'Address' %}:</span>
+                            <span class="text-muted">C-00.13, Sarina Condominium, 62 Hoang The Thien, An Loi Dong Ward, District 2, Ho Chi Minh City</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span>
+                            <span class="text-uppercase">{% trans 'Phone' %}:</span>
+                            <span class="text-muted">+84 123 456 789</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span>
+                            <span class="text-uppercase">{% trans 'Hours' %}:</span>
+                            <span class="text-muted">{% trans 'all week from 9 am to 9 pm' %}</span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span>
+                            <span class="text-uppercase">{% trans 'E-mail' %}:</span>
+                            <a class="text-muted" href="mailto:admin@vleaf.xyz">{% trans 'admin@vleaf.xyz' %}</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="{% static 'js/footer.js' %}"></script>

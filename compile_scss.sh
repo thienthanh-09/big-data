@@ -1,0 +1,1 @@
+sass --update static/scss/:static/css/

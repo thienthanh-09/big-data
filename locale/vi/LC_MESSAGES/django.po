@@ -1,0 +1,1127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-28 07:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: store/forms/store.py:15
+msgid "Phone number must be numeric"
+msgstr "Số điện thoại phải chỉ được chứa chữ số"
+
+#: store/models.py:28
+msgid "Male"
+msgstr "Nam"
+
+#: store/models.py:29
+msgid "Female"
+msgstr "Nữ"
+
+#: store/models.py:31 store/models.py:52 store/models.py:72
+#: templates/account.html:59 templates/components/order_detail_table.html:49
+#: templates/store_dashboard/general.html:18
+msgid "Name"
+msgstr "Tên"
+
+#: store/models.py:32 templates/account.html:63
+msgid "Birthday"
+msgstr "Ngày sinh"
+
+#: store/models.py:33 templates/account.html:67
+msgid "Gender"
+msgstr "Giới tính"
+
+#: store/models.py:34 store/models.py:54 templates/account.html:71
+#: templates/components/footer.html:94
+#: templates/components/order_detail_table.html:55
+#: templates/store_dashboard/general.html:26
+msgid "Phone"
+msgstr "Số điện thoại"
+
+#: store/models.py:35 store/models.py:55 templates/account.html:75
+#: templates/components/footer.html:88
+#: templates/store_dashboard/general.html:30
+msgid "Address"
+msgstr "Địa chỉ"
+
+#: store/models.py:36 templates/account.html:49
+msgid "Avatar"
+msgstr "Ảnh đại diện"
+
+#: store/models.py:37 templates/components/change_timezone_form.html:8
+msgid "Timezone"
+msgstr "Múi giờ"
+
+#: store/models.py:53 store/models.py:73 templates/product_detail_page.html:137
+#: templates/store_dashboard/general.html:22
+msgid "Description"
+msgstr "Mô tả"
+
+#: store/models.py:74
+msgid "Thumbnail"
+msgstr "Ảnh minh họa"
+
+#: store/models.py:75 templates/products_page.html:39
+#: templates/store_dashboard/product_list.html:20
+msgid "Price"
+msgstr "Giá"
+
+#: store/models.py:76 templates/components/order_detail_table.html:31
+msgid "Quantity"
+msgstr "Số lượng"
+
+#: store/models.py:77 templates/store_dashboard/statistic.html:61
+msgid "Sold"
+msgstr "Đã bán"
+
+#: store/models.py:78
+msgid "Available"
+msgstr "Có thể mua"
+
+#: store/models.py:79 templates/store_dashboard/product_list.html:18
+msgid "Category"
+msgstr "Danh mục"
+
+#: store/views/account.py:20 templates/registration/login.html:18
+#: templates/registration/login.html:40
+msgid "Login"
+msgstr "Đăng nhập"
+
+#: store/views/account.py:36
+msgid "Sign Up"
+msgstr "Đăng Ký"
+
+#: store/views/account.py:53
+msgid "Email already in use"
+msgstr "Email đã được sử dụng"
+
+#: store/views/account.py:66 templates/account.html:9
+#: templates/components/navbar.html:59 templates/components/navbar.html:70
+#: templates/registration/password_reset_form.html:10
+msgid "Account"
+msgstr "Tài khoản"
+
+#: store/views/dashboard/dashboard.py:24 templates/components/navbar.html:67
+msgid "Store Dashboard"
+msgstr "Cửa hàng"
+
+#: store/views/dashboard/dashboard.py:59
+msgid "Add Product"
+msgstr "Thêm sản phẩm"
+
+#: store/views/dashboard/dashboard.py:78 templates/store_dashboard.html:34
+msgid "Product List"
+msgstr "Danh sách sản phẩm"
+
+#: store/views/dashboard/dashboard.py:97
+msgid "Store History"
+msgstr "Lịch sử cửa hàng"
+
+#: store/views/dashboard/dashboard.py:122
+#: templates/store_dashboard/statistic.html:6
+msgid "Store Statistics"
+msgstr "Thống kê cửa hàng"
+
+#: store/views/dashboard/dashboard.py:155
+msgid "day"
+msgstr "ngày"
+
+#: store/views/dashboard/dashboard.py:159
+msgid "week"
+msgstr "tuần"
+
+#: store/views/dashboard/dashboard.py:163
+msgid "month"
+msgstr "tháng"
+
+#: store/views/dashboard/dashboard.py:167
+msgid "year"
+msgstr "năm"
+
+#: store/views/notification.py:49
+msgid "Notifications"
+msgstr "Thông báo"
+
+#: store/views/order.py:16
+msgid "You are not allowed to delete this item"
+msgstr "Bạn không được phép xóa mục này"
+
+#: store/views/order.py:27
+msgid "You are not allowed to update this item"
+msgstr "Bạn không được phép cập nhật mục này"
+
+#: store/views/order.py:32 store/views/order.py:53
+msgid "Quantity must be an integer"
+msgstr "Số lượng phải là số nguyên"
+
+#: store/views/order.py:34 store/views/order.py:58
+msgid "Quantity must be greater than 0"
+msgstr "Số lượng phải lớn hơn 0"
+
+#: store/views/order.py:38 store/views/order.py:56
+msgid "Not enough product"
+msgstr "Không đủ sản phẩm"
+
+#: store/views/order.py:48
+msgid "You must be logged in to add to cart"
+msgstr "Bạn phải đăng nhập để thêm sản phẩm vào giỏ hàng"
+
+#: store/views/order.py:72 templates/components/navbar.html:49
+msgid "Cart"
+msgstr "Giỏ hàng"
+
+#: store/views/order.py:100 store/views/order.py:116 store/views/store.py:124
+#: templates/order/history.html:6
+msgid "Order History"
+msgstr "Lịch sử đặt hàng"
+
+#: store/views/payment.py:46
+msgid "Order not found"
+msgstr "Không tìm thấy đơn hàng"
+
+#: store/views/payment.py:49
+msgid "You are not allowed to view this order"
+msgstr "Bạn không được phép xem đơn hàng này"
+
+#: store/views/payment.py:52
+msgid "This order is not in cart"
+msgstr "Đơn hàng này không nằm trong giỏ hàng"
+
+#: store/views/payment.py:54
+msgid "Checkout"
+msgstr "Thanh toán"
+
+#: store/views/product.py:17 templates/cart_page.html:13
+#: templates/components/navbar.html:17 templates/components/navbar.html:18
+msgid "Home"
+msgstr "Trang chủ"
+
+#: store/views/product.py:91 templates/components/navbar.html:42
+#: templates/components/navbar.html:43
+msgid "Products"
+msgstr "Sản phẩm"
+
+#: store/views/product.py:165
+msgid "You liked this product"
+msgstr "Bạn đã thích sản phẩm này"
+
+#: store/views/product.py:176
+msgid "You unliked this product"
+msgstr "Bạn đã bỏ thích sản phẩm này"
+
+#: store/views/product.py:199
+msgid "Favorite Products"
+msgstr "Sản phẩm yêu thích"
+
+#: store/views/store.py:63 templates/chat.html:18
+#: templates/product_detail_page.html:17 templates/store_dashboard.html:20
+msgid "Store"
+msgstr "Cửa hàng"
+
+msgid "store"
+msgstr "cửa hàng"
+
+#: store/views/store.py:97 templates/my_store/add_product.html:8
+msgid "Update product"
+msgstr "Cập nhật sản phẩm"
+
+#: store/views/store.py:140
+msgid "Create Store"
+msgstr "Tạo cửa hàng của bạn"
+
+#: store/views/store.py:161
+msgid "Edit Store"
+msgstr "Chỉnh sửa cửa hàng"
+
+#: store/views/store.py:202 templates/store_dashboard.html:51
+msgid "Pending Orders"
+msgstr "Đơn hàng chờ"
+
+#: templates/account.html:13
+msgid "Username"
+msgstr "Tên tài khoản"
+
+#: templates/account.html:17
+msgid "Email"
+msgstr "Email"
+
+#: templates/account.html:21
+msgid "Change email"
+msgstr "Đổi email"
+
+#: templates/account.html:29
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: templates/account.html:33
+#: templates/registration/password_change_form.html:33
+msgid "Change password"
+msgstr "Đổi mật khẩu"
+
+#: templates/account.html:39
+msgid "Personal Information"
+msgstr "Thông tin cá nhân"
+
+#: templates/account.html:43
+msgid "Edit Profile"
+msgstr "Chỉnh sửa thông tin cá nhân"
+
+#: templates/account.html:54
+msgid "Not set"
+msgstr "Chưa đặt"
+
+#: templates/base/pagination.html:7
+msgid "First"
+msgstr "Trang đầu"
+
+#: templates/base/pagination.html:10
+msgid "Previous"
+msgstr "Trước"
+
+#: templates/base/pagination.html:28
+msgid "Next"
+msgstr "Tiếp"
+
+#: templates/base/pagination.html:31
+msgid "Last"
+msgstr "Trang cuối"
+
+#: templates/base/product_list.html:7 templates/chat.html:22
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#: templates/base/product_list.html:37
+msgid "Empty"
+msgstr ""
+
+#: templates/base/product_list.html:40
+msgid "There are no products matching the selection"
+msgstr "Không có sản phẩm nào được tìm thấy phù hợp với lựa chọn của bạn"
+
+#: templates/cart_page.html:14
+msgid "My Shopping Cart"
+msgstr ""
+
+#: templates/cart_page.html:23
+msgid "You have no items in your shopping cart"
+msgstr "Bạn không có sản phẩm nào trong giỏ hàng"
+
+#: templates/cart_page.html:26
+#: templates/components/modal_body/quick_add_cart.html:16
+msgid "Continue shopping"
+msgstr "Tiếp tục mua hàng"
+
+#: templates/cart_page.html:34
+msgid "Shopping cart"
+msgstr "Giỏ hàng"
+
+#: templates/cart_page.html:85
+msgid "Grand total"
+msgstr "Tổng cộng"
+
+#: templates/cart_page.html:93
+msgid "Proceed to checkout"
+msgstr "Thanh toán"
+
+#: templates/chat.html:17
+msgid "User"
+msgstr "Người dùng"
+
+#: templates/chat.html:47 templates/chat.html:75
+msgid "Tel"
+msgstr "SĐT"
+
+#: templates/chat.html:110
+msgid "Type your message here..."
+msgstr "Nhập tin nhắn của bạn tại đây..."
+
+#: templates/checkout.html:9 templates/components/order_detail_table.html:3
+#: templates/history_detail.html:9 templates/store_dashboard.html:45
+msgid "Order"
+msgstr "Đơn hàng"
+
+#: templates/checkout.html:14 templates/components/order_list.html:27
+#: templates/history_detail.html:14
+#: templates/store_dashboard/pending_orders.html:32
+msgid "item(s)"
+msgstr "sản phẩm"
+
+#: templates/checkout.html:16 templates/checkout.html:63
+#: templates/components/modal_body/quick_add_cart.html:9
+#: templates/components/order_list.html:17 templates/history_detail.html:16
+#: templates/history_detail.html:62
+#: templates/store_dashboard/pending_orders.html:22
+msgid "Total"
+msgstr "Tổng cộng"
+
+#: templates/checkout.html:23 templates/components/order_list.html:16
+#: templates/history_detail.html:25
+#: templates/store_dashboard/pending_orders.html:21
+msgid "Items"
+msgstr "Sản phẩm"
+
+#: templates/checkout.html:55 templates/history_detail.html:54
+msgid "Subtotal"
+msgstr ""
+
+#: templates/checkout.html:73
+msgid "Continue"
+msgstr "Tiếp tục"
+
+#: templates/checkout.html:79 templates/components/order_detail_table.html:47
+#: templates/components/order_list.html:14 templates/history_detail.html:75
+#: templates/store_dashboard/pending_orders.html:20
+msgid "Customer"
+msgstr "Khách hàng"
+
+#: templates/checkout.html:90 templates/history_detail.html:86
+msgid "Contact Person"
+msgstr "Thông tin liên hệ"
+
+#: templates/checkout.html:104 templates/history_detail.html:100
+msgid "Shipping Address"
+msgstr "Địa chỉ giao hàng"
+
+#: templates/checkout.html:114
+#, fuzzy
+#| msgid "Address"
+msgid "Default Address"
+msgstr "Địa chỉ mặc định"
+
+#: templates/checkout.html:121
+msgid "Other"
+msgstr "Khác"
+
+#: templates/components/change_language_form.html:6
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: templates/components/footer.html:7
+msgid "Be in touch with us"
+msgstr "Liên hệ với chúng tôi"
+
+#: templates/components/footer.html:11
+msgid "Enter your e-mail"
+msgstr "Nhập email của bạn"
+
+#: templates/components/footer.html:12
+msgid "Join us"
+msgstr "Tham gia"
+
+#: templates/components/footer.html:42 templates/components/navbar.html:23
+msgid "Categories"
+msgstr "Danh mục"
+
+#: templates/components/footer.html:54
+msgid "Payment"
+msgstr "Thanh toán"
+
+#: templates/components/footer.html:75
+msgid "About"
+msgstr ""
+
+#: templates/components/footer.html:83
+msgid "Contact us"
+msgstr "Liên hệ"
+
+#: templates/components/footer.html:100
+msgid "Hours"
+msgstr "Giờ làm việc"
+
+#: templates/components/footer.html:101
+msgid "all week from 9 am to 9 pm"
+msgstr "cả tuần từ 9 giờ đến 21 giờ"
+
+#: templates/components/footer.html:106
+msgid "E-mail"
+msgstr "Email"
+
+#: templates/components/footer.html:107
+msgid "admin@vleaf.xyz"
+msgstr ""
+
+#: templates/components/modal_body/product_sale.html:3
+msgid "Product sale"
+msgstr "Khuyến mãi"
+
+#: templates/components/modal_body/product_sale.html:7
+msgid "Type"
+msgstr "Loại"
+
+#: templates/components/modal_body/product_sale.html:12
+msgid "Percentage"
+msgstr "Phần trăm"
+
+#: templates/components/modal_body/product_sale.html:16
+msgid "Fixed"
+msgstr "Giá cố định"
+
+#: templates/components/modal_body/product_sale.html:22
+msgid "Value"
+msgstr "Giá trị"
+
+#: templates/components/modal_body/product_sale.html:33
+msgid "Duration"
+msgstr "Trong vòng"
+
+#: templates/components/modal_body/product_sale.html:38
+msgid "day(s)"
+msgstr "ngày"
+
+#: templates/components/modal_body/product_sale.html:51
+msgid "Close"
+msgstr "Đóng"
+
+#: templates/components/modal_body/product_sale.html:52
+msgid "Remove"
+msgstr "Xóa"
+
+#: templates/components/modal_body/product_sale.html:53
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#: templates/components/modal_body/quick_add_cart.html:5
+msgid "Added to cart successfully"
+msgstr ""
+
+#: templates/components/modal_body/quick_add_cart.html:8
+msgid "Qty"
+msgstr ""
+
+#: templates/components/modal_body/quick_add_cart.html:23
+msgid "View cart"
+msgstr "Giỏ hàng của tôi"
+
+#: templates/components/modal_body/quick_view.html:10
+msgid "Availability"
+msgstr "Tình trạng"
+
+#: templates/components/modal_body/quick_view.html:10
+msgid "Many in stock"
+msgstr "Còn hàng"
+
+#: templates/components/modal_body/quick_view.html:10
+msgid "Out of stock"
+msgstr "Hết hàng"
+
+#: templates/components/modal_body/quick_view.html:40
+#: templates/product_detail_page.html:88
+msgid "review(s)"
+msgstr "đánh giá"
+
+#: templates/components/modal_body/quick_view.html:62
+#: templates/components/product_card.html:57
+#: templates/product_detail_page.html:115
+#: templates/product_detail_page.html:302
+msgid "Add to Cart"
+msgstr "Thêm vào giỏ hàng"
+
+#: templates/components/modal_body/quick_view.html:71
+msgid "Product Type"
+msgstr "Loại sản phẩm"
+
+#: templates/components/modal_body/quick_view.html:74
+msgid "View Full Info"
+msgstr "Xem thông tin chi tiết"
+
+#: templates/components/navbar.html:54
+msgid "Notification"
+msgstr "Thông báo"
+
+#: templates/components/navbar.html:64
+msgid "Chat"
+msgstr "Trò chuyện"
+
+#: templates/components/navbar.html:73 templates/store_dashboard.html:54
+msgid "History"
+msgstr "Lịch sử đặt hàng"
+
+#: templates/components/navbar.html:76
+msgid "Favorite"
+msgstr "Sản phẩm yêu thích"
+
+#: templates/components/navbar.html:80
+msgid "Logout"
+msgstr "Đăng xuất"
+
+#: templates/components/navbar.html:92
+msgid "Settings"
+msgstr "Cài đặt"
+
+#: templates/components/order_detail_table.html:14
+msgid "Accepted"
+msgstr "Đã chấp nhận"
+
+#: templates/components/order_detail_table.html:18
+msgid "Rejected"
+msgstr "Đã từ chối"
+
+#: templates/components/order_detail_table.html:22
+msgid "Pending"
+msgstr "Đang chờ"
+
+#: templates/components/order_detail_table.html:30
+#: templates/store_dashboard.html:28
+#: templates/store_dashboard/product_list.html:17
+#: templates/store_dashboard/statistic.html:60
+#: templates/store_dashboard/statistic.html:86
+msgid "Product"
+msgstr "Sản phẩm"
+
+#: templates/components/order_detail_table.html:32
+msgid "Cost"
+msgstr "Đơn giá"
+
+#: templates/components/order_list.html:5
+#: templates/store_dashboard/pending_orders.html:11
+#: templates/store_dashboard/product_list.html:10
+msgid "Start typing to search for orders"
+msgstr "Nhập từ khóa để tìm kiếm đơn hàng"
+
+#: templates/components/order_list.html:12
+#: templates/store_dashboard/pending_orders.html:18
+msgid "Number"
+msgstr "Số đơn hàng"
+
+#: templates/components/order_list.html:13
+#: templates/store_dashboard/pending_orders.html:19
+msgid "Date"
+msgstr "Ngày"
+
+#: templates/components/order_list.html:15
+msgid "Status"
+msgstr "Trạng thái"
+
+#: templates/components/product_list_item.html:53
+msgid "Add to cart"
+msgstr "Thêm vào giỏ hàng"
+
+#: templates/favorite_product.html:12
+msgid "Favorite products"
+msgstr "Sản phẩm yêu thích"
+
+#: templates/forms/profile.html:98
+msgid "Update"
+msgstr "Cập nhật"
+
+#: templates/forms/profile.html:100 templates/my_store/add_product.html:154
+#: templates/my_store/edit_store.html:11
+msgid "Cancel"
+msgstr "Hủy bỏ"
+
+#: templates/home_page.html:11
+msgid "Our featured offers"
+msgstr ""
+
+#: templates/home_page.html:20
+msgid "Special Event"
+msgstr ""
+
+#: templates/home_page.html:23
+msgid "Save up to $300 on select Cameras"
+msgstr ""
+
+#: templates/home_page.html:26
+msgid "Minimum savings is $10"
+msgstr ""
+
+#: templates/home_page.html:29
+msgid "Buy now"
+msgstr "Mua ngay"
+
+#: templates/home_page.html:38
+msgid "Most-viewed items"
+msgstr "Sản phẩm được xem nhiều nhất"
+
+#: templates/home_page.html:43
+msgid "Trending products"
+msgstr "Sản phẩm yêu thích"
+
+#: templates/home_page.html:48
+msgid "Best seller"
+msgstr "Bán chạy nhất"
+
+#: templates/home_page.html:49
+msgid "Top products of this week"
+msgstr "Sản phẩm bán chạy nhất trong tuần"
+
+#: templates/my_store/add_product.html:10
+msgid "Add product"
+msgstr "Thêm sản phẩm"
+
+#: templates/my_store/add_product.html:58
+msgid "Images"
+msgstr "Hình ảnh"
+
+#: templates/my_store/add_product.html:67
+msgid "Click image to remove from product"
+msgstr "Nhấn vào hình ảnh để xóa khỏi sản phẩm"
+
+#: templates/my_store/add_product.html:72
+msgid "Videos"
+msgstr "Videos"
+
+#: templates/my_store/add_product.html:90
+msgid "Remove video"
+msgstr "Xóa video"
+
+#: templates/my_store/add_product.html:144
+msgid "Show product to the public"
+msgstr "Hiển thị sản phẩm công khai"
+
+#: templates/my_store/add_product.html:150
+#: templates/my_store/edit_store.html:10
+msgid "Save"
+msgstr "Lưu"
+
+#: templates/my_store/add_product.html:152
+#: templates/my_store/create_store.html:9 templates/registration/signup.html:38
+msgid "Create"
+msgstr "Tạo"
+
+#: templates/my_store/create_store.html:6
+msgid "Create your store"
+msgstr "Tạo cửa hàng của bạn"
+
+#: templates/my_store/edit_store.html:6
+msgid "Edit your store"
+msgstr "Chỉnh sửa cửa hàng"
+
+#: templates/notification/list.html:11
+msgid "Unhide read notifications"
+msgstr "Hiển thị thông báo đã đọc"
+
+#: templates/notification/list.html:15
+msgid "Hide read notifications"
+msgstr "Ẩn thông báo đã đọc"
+
+#: templates/notification/list.html:20
+msgid "Read all"
+msgstr "Đọc tất cả"
+
+#: templates/notification/list.html:38
+#, python-format
+msgid "Your store has received a new order (#%(id)s)"
+msgstr "Cửa hàng của bạn đã nhận được một đơn hàng mới (#%(id)s)"
+
+#: templates/notification/list.html:42
+#, python-format
+msgid "Your product <b>%(name)s</b> has received a new comment"
+msgstr "Sản phẩm <b>%(name)s</b> của bạn đã nhận được một bình luận mới"
+
+#: templates/notification/list.html:46
+#, python-format
+msgid "Your order (#%(id)s) has been accepted"
+msgstr "Đơn hàng (#%(id)s) của bạn đã được chấp nhận"
+
+#: templates/notification/list.html:50
+#, python-format
+msgid "Your order (#%(id)s) has been rejected"
+msgstr "Đơn hàng (#%(id)s) của bạn đã bị từ chối"
+
+#: templates/order/thank_you.html:10
+msgid "Thank you for your purchase!"
+msgstr "Cảm ơn bạn đã thanh toán"
+
+#: templates/order/thank_you.html:13
+msgid "We will notify you when your purchase has been accepted/rejected."
+msgstr ""
+"Chúng tôi sẽ thông báo cho bạn khi đơn hàng của bạn được chấp nhận/từ chối"
+
+#: templates/order/thank_you.html:17
+msgid "Return to home in"
+msgstr "Trở về trang chủ trong"
+
+#: templates/order/thank_you.html:18
+msgid "s"
+msgstr "s"
+
+#: templates/product_detail_page.html:97
+msgid "Chat with the store"
+msgstr "Chat với cửa hàng"
+
+#: templates/product_detail_page.html:124
+msgid "Remove from Favorited products"
+msgstr "Bỏ yêu thích sản phẩm"
+
+#: templates/product_detail_page.html:124
+msgid "Add to Favorited products"
+msgstr "Thêm vào sản phẩm yêu thích"
+
+#: templates/product_detail_page.html:147
+msgid "Additional infomation"
+msgstr "Thông tin bổ sung"
+
+#: templates/product_detail_page.html:153
+msgid "Remaining quantity"
+msgstr "Số lượng sản phẩm còn lại"
+
+#: templates/product_detail_page.html:161
+msgid "Reviews"
+msgstr "Đánh giá"
+
+#: templates/product_detail_page.html:165
+msgid "Customer reviews"
+msgstr "Đánh giá của khách hàng"
+
+#: templates/product_detail_page.html:168
+msgid "No reviews yet"
+msgstr "Chưa có đánh giá nào"
+
+#: templates/product_detail_page.html:186
+#, python-format
+msgid "Based on %(count)s review(s)"
+msgstr "Dựa trên %(count)s đánh giá"
+
+#: templates/product_detail_page.html:193
+#: templates/product_detail_page.html:198
+msgid "Write a review"
+msgstr "Viết đánh giá"
+
+#: templates/product_detail_page.html:200 templates/products_page.html:64
+msgid "Rating"
+msgstr "Đánh giá"
+
+#: templates/product_detail_page.html:212
+msgid "Review"
+msgstr "Đánh giá"
+
+#: templates/product_detail_page.html:216
+msgid "Submit review"
+msgstr "Hoàn tất"
+
+#: templates/product_detail_page.html:269
+msgid "Related products"
+msgstr "Sản phẩm liên quan"
+
+#: templates/products_page.html:19
+msgid "Product type"
+msgstr "Loại sản phẩm"
+
+#: templates/products_page.html:53 templates/products_page.html:55
+msgid "Over"
+msgstr "Trên"
+
+#: templates/products_page.html:72 templates/products_page.html:74
+msgid "Above"
+msgstr "Trên"
+
+#: templates/products_page.html:84
+msgid "Sort"
+msgstr "Sắp xếp"
+
+#: templates/products_page.html:91 templates/products_page.html:93
+msgid "Name ascending"
+msgstr "Tên tăng dần"
+
+#: templates/products_page.html:97 templates/products_page.html:99
+msgid "Name descending"
+msgstr "Tên giảm dần"
+
+#: templates/products_page.html:103 templates/products_page.html:105
+msgid "Price ascending"
+msgstr "Giá tăng dần"
+
+#: templates/products_page.html:109 templates/products_page.html:111
+msgid "Price descending"
+msgstr "Giá giảm dần"
+
+#: templates/registration/login.html:5
+msgid "Already registered"
+msgstr "Đã đăng ký"
+
+#: templates/registration/login.html:11
+msgid "New customer"
+msgstr "Khách hàng"
+
+#: templates/registration/login.html:12
+msgid ""
+"By creating an account with our store, you will be able to move through the "
+"checkout process faster, store multiple shipping addresses, view and track "
+"your orders in your account and more"
+msgstr ""
+
+#: templates/registration/login.html:13 templates/registration/signup.html:5
+msgid "Create an account"
+msgstr ""
+
+#: templates/registration/login.html:19
+msgid "If you have an account with us, please log in"
+msgstr "Nếu bạn đã có tài khoản, vui lòng đăng nhập"
+
+#: templates/registration/login.html:34
+msgid "Your username and password didn't match. Please try again"
+msgstr "Tên tài khoản hoặc mật khẩu sai. Vui lòng thử lại"
+
+#: templates/registration/login.html:44
+msgid "Lost your password"
+msgstr "Quên mật khẩu?"
+
+#: templates/registration/password_reset_confirm.html:31
+#: templates/registration/password_reset_form.html:19
+msgid "Submit"
+msgstr "Hoàn tất"
+
+#: templates/registration/password_reset_done.html:7
+msgid "Check your inbox"
+msgstr "Kiểm tra hộp thư"
+
+#: templates/registration/password_reset_done.html:8
+msgid "Reset password URL was sent to your email"
+msgstr "Đường dẫn tạo lại mật khẩu đã được gửi đến email của bạn"
+
+#: templates/registration/password_reset_form.html:5
+msgid "Forgot your password"
+msgstr "Quên mật khẩu?"
+
+#: templates/registration/password_reset_form.html:6
+msgid ""
+"Enter your email to the input below, we will send to you a reset password URL"
+msgstr ""
+"Nhập email của bạn bên dưới, chúng tôi sẽ gửi cho bạn đường dẫn tạo lại mật "
+"khẩu"
+
+#: templates/registration/signup.html:9
+msgid "Personal account"
+msgstr "Thông tin cá nhân"
+
+#: templates/store_dashboard.html:14 templates/store_dashboard/general.html:9
+msgid "General"
+msgstr "Thông tin chung"
+
+#: templates/store_dashboard.html:37
+msgid "Create Product"
+msgstr "Thêm sản phẩm"
+
+#: templates/store_dashboard.html:62 templates/store_dashboard.html:68
+msgid "Statistic"
+msgstr "Thống kê"
+
+#: templates/store_dashboard/general.html:13
+#: templates/store_dashboard/product_list.html:61
+msgid "Edit"
+msgstr "Chỉnh sửa"
+
+#: templates/store_dashboard/pending_orders.html:40
+msgid "Accept"
+msgstr "Chấp nhận"
+
+#: templates/store_dashboard/pending_orders.html:41
+msgid "Reject"
+msgstr "Từ chối"
+
+#: templates/store_dashboard/product_list.html:19
+msgid "Stock"
+msgstr "Số lượng"
+
+#: templates/store_dashboard/product_list.html:41
+msgid "Out of Stock"
+msgstr "Hết hàng"
+
+#: templates/store_dashboard/product_list.html:43
+#, python-format
+msgid "%(quantity)s in Stock"
+msgstr "%(quantity)s trong kho"
+
+#: templates/store_dashboard/product_list.html:60
+msgid "Visit"
+msgstr "Truy cập"
+
+#: templates/store_dashboard/product_list.html:62
+msgid "Sale"
+msgstr "Khuyến mãi"
+
+#: templates/store_dashboard/product_list.html:63
+msgid "Delete"
+msgstr "Xóa"
+
+#: templates/store_dashboard/statistic.html:9
+msgid "Accepted rates"
+msgstr "Tỉ lệ chấp nhận"
+
+#: templates/store_dashboard/statistic.html:17
+msgid "7-days orders"
+msgstr "Số đơn hàng trong 7 ngày"
+
+#: templates/store_dashboard/statistic.html:21
+msgid "30-days orders"
+msgstr "Số đơn hàng trong 30 ngày"
+
+#: templates/store_dashboard/statistic.html:28
+msgid "30-days income"
+msgstr "Thu nhập trong 30 ngày"
+
+#: templates/store_dashboard/statistic.html:42
+msgid "Graph"
+msgstr "Biểu đồ"
+
+#: templates/store_dashboard/statistic.html:46
+msgid "Table"
+msgstr "Bảng"
+
+#: templates/store_dashboard/statistic.html:56
+msgid "Sell Most"
+msgstr "Bán nhiều nhất"
+
+#: templates/store_dashboard/statistic.html:77
+#: templates/store_dashboard/statistic.html:105
+msgid "Download CSV"
+msgstr "Tải về CSV"
+
+#: templates/store_dashboard/statistic.html:82
+msgid "High Rates"
+msgstr "Tỉ lệ đánh giá cao nhất"
+
+#: templates/store_dashboard/statistic.html:87
+msgid "Rates"
+msgstr "Tỉ lệ"
+
+#: templates/store_dashboard/statistic.html:194
+msgid "Save as PDF"
+msgstr "Tải về PDF"
+
+msgid "Office Products"
+msgstr "Sản phẩm văn phòng"
+
+msgid "Appliances"
+msgstr "Thiết bị gia dụng"
+
+msgid "Apps & Games"
+msgstr "Ứng dụng & trò chơi"
+
+msgid "Arts, Crafts & Sewing"
+msgstr "Nghệ thuật, Chế tạo & May"
+
+msgid "Automotive Parts & Accessories"
+msgstr "Phụ tùng & Phụ kiện ô tô"
+
+msgid "Baby"
+msgstr "Em bé"
+
+msgid "Beauty & Personal Care"
+msgstr "Sắc đẹp & cá nhân"
+
+msgid "Books"
+msgstr "Sách"
+
+msgid "Cell Phones & Accessories"
+msgstr "Điện thoại cầm tay & Phụ kiện"
+
+msgid "Clothing, Shoes and Jewelry"
+msgstr "Quần áo, Giày dép và Trang sức"
+
+msgid "Collectibles & Fine Art"
+msgstr "Sưu tầm & Mỹ thuật"
+
+msgid "Computers"
+msgstr "Máy vi tính"
+
+msgid "Electronics"
+msgstr "Thiết bị điện tử"
+
+msgid "Garden & Outdoor"
+msgstr "Vườn & ngoài trời"
+
+msgid "Grocery & Gourmet Food"
+msgstr "Tạp hóa & Đồ ăn"
+
+msgid "Handmade"
+msgstr "Thủ công"
+
+msgid "Health, Household & Baby Care"
+msgstr "Sức khỏe, gia dụng & trẻ em"
+
+msgid "Home & Kitchen"
+msgstr "Nhà & bếp"
+
+msgid "Industrial & Scientific"
+msgstr "Công nghiệp & Khoa học"
+
+msgid "Luggage & Travel Gear"
+msgstr "Hành lý & Thiết bị Du lịch"
+
+msgid "Movies & TV"
+msgstr "Phim & TV"
+
+msgid "Musical Instruments"
+msgstr "Nhạc cụ"
+
+msgid "Pet Supplies"
+msgstr "Đồ dùng cho thú cưng"
+
+msgid "Sports & Outdoors"
+msgstr "Thể thao & Ngoài trời"
+
+msgid "Tools & Home Improvement"
+msgstr "Công cụ & Cải tiến Nhà cửa"
+
+msgid "Toys & Games"
+msgstr "Đồ chơi & Trò chơi"
+
+msgid "Video Games"
+msgstr "Trò chơi điện tử"
+
+msgid ""
+"This password is too short. It must contain at least %(min_length)d "
+"character."
+msgid_plural ""
+"This password is too short. It must contain at least %(min_length)d "
+"characters."
+msgstr[0] "Mật khẩu quá ngắn. Nó phải chứa ít nhất %(min_length)d ký tự."
+
+msgid "Your password must contain at least %(min_length)d character."
+msgid_plural ""
+"Your password must contain at least %(min_length)d characters."
+msgstr[0] "Mật khẩu của bạn phải chứa ít nhất %(min_length)d ký tự."
+
+msgid "The password is too similar to the %(verbose_name)s."
+msgstr "Mật khẩu quá giống với %(verbose_name)s."
+
+msgid ""
+"Your password can’t be too similar to your other personal information."
+msgstr "Mật khẩu của bạn không được quá giống với thông tin cá nhân khác."
+
+msgid "This password is too common."
+msgstr "Mật khẩu này quá phổ biến."
+
+msgid "Your password can’t be a commonly used password."
+msgstr "Mật khẩu của bạn không được là mật khẩu được dùng phổ biến."
+
+msgid "This password is entirely numeric."
+msgstr "Mật khẩu này hoàn toàn là số."
+
+msgid "Your password can’t be entirely numeric."
+msgstr "Mật khẩu của bạn không được hoàn toàn bằng số."
+
+msgid "Password reset on %(site_name)s"
+msgstr "Đặt lại mật khẩu trên %(site_name)s"
+
+msgid ""
+"Enter a valid username. This value may contain only English letters, "
+"numbers, and @/./+/-/_ characters."
+msgstr ""
+"Điền tên đăng nhập hợp lệ. Giá trị này chỉ có thể chứa các chữ cái tiếng "
+"Anh, số, và các ký tự @/./+/-/_"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"Điền tên đăng nhập hợp lệ. Giá trị này chỉ có thể chứa các chữ cái, số, "
+"và các ký tự @/./+/-/_"
+
+msgid "The two password fields didn’t match."
+msgstr "Hai trường mật khẩu không giống nhau."

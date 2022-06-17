@@ -1,0 +1,8 @@
+__pycache__/
+dotenv/
+media/
+.env
+.data/
+.sass-cache/
+deploy_settings.py
+.coverage

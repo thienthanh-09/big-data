@@ -1,0 +1,38 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-center mt-5">
+        <img src="{% static 'img/purchase/thank-you.png' %}" alt="logo" class="w-75">
+    </div>
+    <div class="text-center">
+        <b>{% trans 'Thank you for your purchase!' %}</b>
+    </div>
+    <div class="text-center">
+        {% trans 'We will notify you when your purchase has been accepted/rejected.' %}
+    </div>
+
+    <div class="text-center">
+        {% trans 'Return to home in' %}
+        <span id="second" class="fw-bold">5</span>{% trans 's' %}
+    </div>
+</div>
+<script>
+    window.onload = function(){
+        let second = document.getElementById('second');
+        let value = parseInt(second.innerText);
+        const returnHome = (time) => {
+            if (time == 0){
+                window.location.href = '/';
+            } else{
+                second.innerText = time;
+                setTimeout(() => {
+                    returnHome(time - 1);
+                }, 1000);
+            }
+        };
+        returnHome(value);
+    }
+</script>
+{% endblock %}

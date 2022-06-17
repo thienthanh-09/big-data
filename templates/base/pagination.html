@@ -1,0 +1,35 @@
+{% load i18n %}
+{% load get_params %}
+<nav>
+    <ul class="pagination justify-content-center my-2">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-dark" href="?{% reget_params page=1 %}">&laquo; {% trans 'First' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-dark" href="?{% reget_params page=page_obj.previous_page_number %}">{% trans 'Previous' %}</a>
+        </li>
+        {% endif %}
+        {% if page_obj.has_previous or page_obj.has_next %}
+            {% for i in page_obj.paginator.page_range %}
+                {% if i == page_obj.number %}
+                <li class="page-item active">
+                    <a class="page-link bg-orange border-orange" href="#">{{page_obj.number}}</a>
+                </li>
+                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?{% reget_params page=i %}">{{i}}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link text-dark" href="?{% reget_params page=page_obj.next_page_number %}">{% trans 'Next' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-dark" href="?{% reget_params page=page_obj.paginator.num_pages %}">{% trans 'Last' %} &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

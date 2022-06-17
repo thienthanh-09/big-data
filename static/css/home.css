@@ -1,0 +1,7 @@
+.event-image {
+  object-fit: contain; }
+  @media screen and (min-width: 1200px) {
+    .event-image {
+      height: 20rem; } }
+
+/*# sourceMappingURL=home.css.map */

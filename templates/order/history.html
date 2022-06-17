@@ -1,0 +1,10 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="container mb-5">
+    <h4 class="m-3 text-center">{% trans 'Order History' %}</h4>
+    {% include 'components/order_list.html' %}
+    {% include 'base/pagination.html' %}
+</div>
+{% endblock %}

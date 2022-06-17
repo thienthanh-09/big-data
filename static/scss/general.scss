@@ -1,0 +1,37 @@
+@import "variables";
+
+.text-orange {
+    color: $orange !important;
+}
+
+.bg-orange {
+    background-color: $orange !important;
+}
+
+.bg-orange-light {
+    background-color: $orange-light !important;
+}
+
+.bg-secondary-light {
+    background-color: $secondary-light !important;
+}
+
+.btn-orange {
+    background-color: $orange !important;
+    border-color: $orange !important;
+}
+
+.btn-orange-light {
+    background-color: $orange-light !important;
+    border-color: $orange-light !important;
+}
+
+.border-orange {
+    border-color: $orange !important;
+}
+
+.avatar {
+    object-fit: cover;
+    height: 4rem;
+    width: 4rem;
+}

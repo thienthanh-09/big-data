@@ -1,0 +1,15 @@
+@import 'variables';
+
+.product-thumbnail {
+    height: 10rem;
+
+    @media screen and (min-width: $md) {
+        height: 20rem;
+    }
+
+    @media screen and (min-width: $lg) {
+        height: 5rem;
+    }
+
+    object-fit: contain;
+}

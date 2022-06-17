@@ -1,0 +1,23 @@
+.fit-screen {
+  height: calc(100vh - 72px);
+  overflow-y: auto; }
+
+.session {
+  text-decoration: none !important;
+  color: black;
+  margin-left: 1rem;
+  padding: 0.5rem 0; }
+
+.session-active {
+  font-weight: bold;
+  color: #f7941d; }
+
+.accordion {
+  background-color: white;
+  top: 100px; }
+
+.accordion-button {
+  background-color: white !important;
+  color: black; }
+
+/*# sourceMappingURL=store_dashboard.css.map */

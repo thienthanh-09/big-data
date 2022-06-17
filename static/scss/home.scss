@@ -1,0 +1,9 @@
+@import 'variables';
+
+.event-image {
+    @media screen and (min-width: $xl) {
+        height: 20rem;
+    }
+
+    object-fit: contain;
+}

@@ -1,0 +1,60 @@
+{% load i18n %}
+{% load static %}
+{% load get_params %}
+{% block content %}
+<div class="row justify-content-end">
+    <div class="col-auto d-flex align-items-center">
+        <input type="search" class="form-control" placeholder="{% trans 'Search' %}" id="search-input" value="{{request.GET.search}}">
+        <script>
+            getParameters = () => {
+                address = window.location.search;
+                parameterList = new URLSearchParams(address);
+                let map = new Map();
+            
+                parameterList.forEach((value, key) => {
+                    map.set(key, value);
+                });
+            
+                return map;
+            }
+
+            let obj = document.getElementById('search-input');
+            obj.addEventListener('keyup', function(e) {
+                if (e.keyCode === 13) {
+                    let params = getParameters()
+                    params.set('search', obj.value)
+                    window.location.href = window.location.origin + window.location.pathname + '?' + (new URLSearchParams(params)).toString();
+                }
+            });
+        </script>
+    </div>
+    <a class="btn col-auto" href="?{% reget_params mode='list' %}" role="button"><i class="fa-solid fa-grip-lines {% if request.GET.mode == 'list' %} text-orange {% endif %}"></i></a>
+    <a class="btn col-auto" href="?{% reget_params mode='grid' %}" role="button"><i class="fa-solid fa-grip {% if request.GET.mode != 'list' %} text-orange {% endif %}"></i></a>
+</div>
+{% if object_list|length == 0 %}
+    <div class="row m-3">
+        <div class="row">
+            <span class="text-center text-uppercase fw-bold fs-2">{% trans 'Empty' %}</span>
+        </div>
+        <div class="row">
+            <span class="text-center text-muted">{% trans 'There are no products matching the selection' %}.</span>
+        </div>
+    </div>
+{% endif %}
+<div class="container product-grid-mode my-4" {% if request.GET.mode == 'list' %} hidden {% endif %}>
+    <div class="row d-flex justify-content-start product-row align-items-end">
+    {% for item in object_list %}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 my-3">
+            {% include 'components/product_card.html' with item=item %}
+        </div>
+    {% endfor %}
+    </div>
+</div>
+<div class="container product-list-mode my-4" {% if request.GET.mode != 'list' %} hidden {% endif %}>
+{% for item in object_list %}
+    {% include 'components/product_list_item.html' %}
+{% endfor %}
+</div>
+<script type="module" src="{% static 'js/product-list.js' %}"></script>
+<script type="module" src="{% static 'js/change-view.js' %}"></script>
+{% endblock %}

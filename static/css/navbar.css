@@ -1,0 +1,8 @@
+.dropdown-hover:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; }
+
+.navbar {
+  z-index: 9999; }
+
+/*# sourceMappingURL=navbar.css.map */

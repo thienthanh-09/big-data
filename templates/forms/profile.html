@@ -1,0 +1,108 @@
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <form enctype="multipart/form-data" method="post"> {% csrf_token %}
+        <div class="row mb-3">
+            <label for="{{form.avatar.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.avatar.label}}</label>
+            <div class="row">
+                <div class="col-md-auto">
+                    <img src="{{form.avatar.value.url}}" class="avatar rounded-circle" alt="{{form.avatar.label}}">
+                </div>
+                <div class="col-md-auto d-flex align-items-center">
+                    <input type="file" accept="image/*" name="{{form.avatar.html_name}}" id="{{form.avatar.id_for_label}}" class="form-control">
+                    <div class="form-text">
+                        {{form.avatar.errors}}
+                    </div>
+                    {% if form.avatar.help_text %}
+                        <div class="form-text">
+                            {{form.avatar.help_text}}
+                        </div>
+                    {% endif %}        
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{form.name.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.name.label}}</label>
+                        <input type="text" name="{{form.name.html_name}}" id="{{form.name.html_name}}" class="form-control" value="{{form.name.value|default:''}}">
+                        <div class="form-text">
+                            {{form.name.errors}}
+                        </div>
+                        {% if form.name.help_text %}
+                            <div class="form-text">
+                                {{form.name.help_text}}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{form.phone.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.phone.label}}</label>
+                        <input type="text" name="{{form.phone.html_name}}" id="{{form.phone.html_name}}" class="form-control" value="{{form.phone.value|default:''}}">
+                        <div class="form-text">
+                            {{form.phone.errors}}
+                        </div>
+                        {% if form.phone.help_text %}
+                            <div class="form-text">
+                                {{form.phone.help_text}}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{form.birthday.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.birthday.label}}</label>
+                        <input type="date" name="{{form.birthday.html_name}}" id="{{form.birthday.html_name}}" class="form-control" value="{{form.birthday.value|date:'Y-m-d'}}">
+                        <div class="form-text">
+                            {{form.birthday.errors}}
+                        </div>
+                        {% if form.birthday.help_text %}
+                            <div class="form-text">
+                                {{form.birthday.help_text}}
+                            </div>
+                        {% endif %}
+                    </div> 
+                    <div class="mb-3">
+                        <label for="{{form.gender.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.gender.label}}</label>
+                        <select name="{{form.gender.html_name}}" id="{{form.gender.html_name}}" class="form-control">
+                            {% for option in form.gender %}
+                                {{option}}
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">
+                            {{form.gender.errors}}
+                        </div>
+                        {% if form.gender.help_text %}
+                            <div class="form-text">
+                                {{form.gender.help_text}}
+                            </div>
+                        {% endif %}
+                    </div>                   
+                </div> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="{{form.address.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.address.label}}</label>
+                        <input type="text" name="{{form.address.html_name}}" id="{{form.address.html_name}}" class="form-control" value="{{form.address.value|default:''}}">
+                        <div class="form-text">
+                            {{form.address.errors}}
+                        </div>
+                        {% if form.address.help_text %}
+                            <div class="form-text">
+                                {{form.address.help_text}}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>       
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary mx-2">{% trans 'Update' %}</button>
+            <a name="" id="" class="btn btn-danger" href="/account/" role="button">
+                {% trans 'Cancel' %}
+            </a>
+        </div>
+    </form>
+</div>
+<script type="module" src="{% static 'js/profile-update.js' %}"></script>
+{% endblock %}

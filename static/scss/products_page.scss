@@ -1,0 +1,20 @@
+@import "variables";
+
+.accordion {
+    background-color: white;
+    top: 100px;
+}
+
+.accordion-button {
+    background-color: white !important;
+}
+
+.colored-primary-hover:hover {
+    color: $blue !important;
+    font-weight: bold;
+}
+
+.selected {
+    color: $blue !important;
+    font-weight: bold;
+}

@@ -1,0 +1,24 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/product_card.css' %}">
+<link rel="stylesheet" href="{% static 'css/general.css' %}">
+{% endblock %}
+{% block content %}
+{% csrf_token %}
+<div class="container">
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-12 col-lg-10 col-xl-10">
+            <div class="m-3 text-center text-uppercase fw-bold fs-2">
+                {% trans 'Favorite products' %}
+            </div>
+            <div>
+                {% include 'base/product_list.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'components/quick_modal.html' %}
+<script type="module" src="{% static 'js/product-card.js' %}"></script>
+{% endblock %}

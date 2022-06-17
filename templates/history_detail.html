@@ -1,0 +1,126 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% csrf_token %}
+{% block content %}
+<div class="row my-5 justify-content-center">
+    <div class="row w-75">
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                <span class="row mb-2 fw-bold text-uppercase fs-4">{% trans 'Order' %} #{{order.id}}</span>
+            </div>
+            {% if handle %}
+            <div class="col-auto row align-items-center" data-id="{{order.id}}">
+                <i class="col-auto fa-solid fa-xmark text-danger" id="reject-btn" role="button"></i>
+                <i class="col-auto fa fa-check text-success" id="accept-btn" aria-hidden="true" role="button"></i>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row mb-5 border-top border-bottom">
+            <div class="hstack gap-3 py-2">
+                <div>{{order.created_at}}</div>
+                <div class="vr"></div>
+                <div>{{order.orderdetail_set.count}} {% trans 'item(s)' %}</div>
+                <div class="vr"></div>
+                <div>{% trans 'Total' %} ${{order.cal_cost|intcomma}}</div>
+                <div class="vr"></div>
+                <span class="text-uppercase badge {% if order.status == 'Pending' %}bg-warning{% elif order.status == 'Accepted' %}bg-success{% else %}bg-danger{% endif %}">{{order.status}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-8 px-4">
+                <div class="row p-3 mb-4 border shadow">
+                    <div class="row mt-1 mb-4">
+                        <span class="p-0 fw-bold fs-5">{% trans 'Items' %}</span>
+                    </div>
+                    <table class="table">
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                            {% for item in order.orderdetail_set.all %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="">
+                                            <img src="{{item.product.thumbnail.url}}" style="object-fit: contain; width: 5rem; height: 5rem;">
+                                        </div>
+                                        <a href="{{item.product.get_absolute_url}}" class="ms-1 text-decoration-none">{{item.product.name}}</a>
+                                    </div>
+                                </td>
+                                <td class="text-end align-middle">
+                                    {{item.quantity}}
+                                </td>
+                                <td class="text-end align-middle">
+                                    ${{item.cost|intcomma}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">
+                                    {% trans 'Subtotal' %}
+                                </td>
+                                <td class="text-end">
+                                    ${{order.cal_cost|intcomma}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="fw-bold">
+                                    {% trans 'Total' %}
+                                </td>
+                                <td class="text-end fw-bold">
+                                    ${{order.cal_cost|intcomma}}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xl-4 px-4">
+                <div class="row p-3 mb-4 border shadow">
+                    <div class="row mt-1 mb-4">
+                        <span class="p-0 fw-bold fs-5">{% trans 'Customer' %}</span>
+                    </div>
+                    <div class="row mb-1">
+                        <img class="col-auto p-1 rounded-circle avatar" src="{{order.user.profile.avatar.url}}">
+                        <div class="col-auto d-flex align-items-center">
+                            <span class="fw-bold">{{order.user.username}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-3 mb-4 border shadow">
+                    <div class="row mt-1 mb-4">
+                        <span class="p-0 fw-bold fs-5">{% trans 'Contact Person' %}</span>
+                    </div>
+                    <div class="row mb-1">
+                        <span class="p-0">{{order.user.profile.name}}</span>
+                    </div>
+                    <div class="row mb-1">
+                        <a class="text-decoration-none p-0" href="mailto:{{order.user.email}}">{{order.user.email}}</a>
+                    </div>
+                    <div class="row mb-1">
+                        <span class="p-0 text-muted">{{order.user.profile.phone}}</span>
+                    </div>
+                </div>
+                <div class="row p-3 mb-4 border shadow">
+                    <div class="row mt-1 mb-4">
+                        <span class="p-0 fw-bold fs-5">{% trans 'Shipping Address' %}</span>
+                    </div>
+                    <div class="row mb-1">
+                        <span class="p-0">{{order.user.profile.name}}</span>
+                    </div>
+                    <div class="row mb-1">
+                        <span class="p-0">{{order.location}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if handle %}
+<script type="module" src="{% static 'js/handle-order.js' %}"></script>
+{% endif %}
+{% endblock %}

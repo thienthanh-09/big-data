@@ -1,0 +1,81 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+{% block content %}
+{% csrf_token %}
+<div class="container my-5">
+    <div class="row my-4">
+        <span class="text-uppercase fw-bold fs-4">{% trans 'Account' %}</span>
+    </div>
+    <div class="container">
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Username' %}</div>
+            <div class="col-md-10">{{user.username}}</div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Email' %}</div>
+            <div class="col-md-10">
+                <div id="non-edit">
+                    <span>{{user.email}}</span>
+                    <span class="col-auto edit-btn text-primary" role="button">{% trans 'Change email' %}</span>
+                </div>
+                <div id="edit" hidden>
+                    <input type="email" class="form-control" id="email-input" value="{{user.email}}">
+                </div>
+            </div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Password' %}</div>
+            <div class="col-md-10">
+                <span>************</span>
+                <a name="" id="" class="text-decoration-none" href="{% url 'change_password' %}" role="button">
+                    {% trans 'Change password' %}
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row my-4">
+        <span class="col-auto text-uppercase fw-bold fs-4">{% trans 'Personal Information' %}</span>
+        <div class="col-auto d-flex align-items-center">
+            <a class="text-decoration-none" href="{% url 'profile' pk=profile.id %}" role="button">
+                <i class="fa-solid fa-pen-to-square"></i>
+                {% trans 'Edit Profile' %}
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Avatar' %}</div>
+            <div class="col-md-10">
+                {% if profile.avatar %}
+                <img class="rounded-circle" src="{{profile.avatar.url}}" style="object-fit: cover; height: 10rem; width: 10rem;">
+                {% else %}
+                <span class="fst-italic">{% trans 'Not set' %}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Name' %}</div>
+            <div class="col-md-10">{{profile.name}}</div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Birthday' %}</div>
+            <div class="col-md-10">{{profile.birthday|date:'d/m/Y'}}</div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Gender' %}</div>
+            <div class="col-md-10">{% trans profile.gender %}</div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Phone' %}</div>
+            <div class="col-md-10">{{profile.phone}}</div>
+        </div>
+        <div class="row border-top p-2 mx-3">
+            <div class="text-uppercase fw-bold col-md-2">{% trans 'Address' %}</div>
+            <div class="col-md-10">{{profile.address}}</div>
+        </div>
+    </div>
+</div>
+<script type="module" src="{% static 'js/account.js' %}"></script>
+{% endblock %}

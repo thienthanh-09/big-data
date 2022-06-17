@@ -1,0 +1,78 @@
+{% load i18n %}
+{% load humanize %}
+<div class="row">
+    <div class="col-md-6 row justify-content-center align-items-center">
+        <img class="img-fluid" src="{{product.thumbnail.url}}">
+    </div>
+    <div class="col-md-6 row">
+        <div class="row p-0 m-0">
+            <div class="row">
+                <span>{% trans 'Availability' %}: {% if product.quantity > 0 %} <span class="text-muted"> {% trans 'Many in stock' %} </span> {% else %} <span class="text-muted text-danger"> {% trans 'Out of stock' %}</span> {% endif %}</span>
+            </div>
+            <div class="row">
+                <span class="fw-bold">{{product.name}}</span>
+            </div>
+            <div class="row">
+                <span class="price-hover fw-bold fs-1" item-value="{{product.sell_price}}">
+                    {% if product.sale.valid and product.sale.price < product.price %}
+                    <span class="text-decoration-line-through text-danger">${{product.price|intcomma}}</span>
+                    <span class="text-primary" id="new-price">${{product.sale.price|intcomma}}</span>
+                    {% else %}
+                        ${{product.price|intcomma}}
+                    {% endif %}
+                </span>
+            </div>
+            <div class="row justify-content-start">
+                <div class="col-auto">
+                    <div class="container m-0 p-0">
+                    {% with ''|center:5 as range %}
+                    {% for _ in range %}
+                        {% if forloop.counter <= product.rating %}
+                        <i class="fa-solid fa-star fa-2xs text-warning col-auto"></i>
+                        {% else %}
+                        <i class="fa fa-star-o fa-2xs" aria-hidden="true"></i>
+                        {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <span class="text-primary">{{product.rating_count}} {% trans 'review(s)' %}</span>
+                </div>
+            </div>
+            <div class="row my-3">
+                <p class="text-muted">{{product.description}}</p>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-primary decrease-qty-btn">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                        </button>
+                        <input class="form-control text-center qty-input" value="1">
+                        <button type="button" class="btn btn-primary increase-qty-btn">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="btn-group" role="button">
+                        <div class="row jusify-content-center align-items-center bg-primary rounded-3">
+                            <button type="button" class="btn btn-primary col-auto btn fw-bold" id="quick-view-add-cart" product-id="{{product.id}}">
+                                <i class="fa-solid fa-cart-shopping bg-primary text-warning col-auto"></i> {% trans 'Add to Cart' %}
+                            </button>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-auto">
+            <div class="row">
+                <span>{% trans 'Product Type' %}: <span class="text-muted">{% trans product.category.name %}</span></span>
+            </div>
+            <div class="row my-2">
+                <a class="text-decoration-none" href="{{product.get_absolute_url}}">{% trans 'View Full Info' %}</a>
+            </div>
+        </div>
+    </div>
+</div>

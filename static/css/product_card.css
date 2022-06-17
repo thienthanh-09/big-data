@@ -1,0 +1,55 @@
+.card .product-thumbnail {
+  transition: height 0.3s ease-in-out;
+  height: 20rem; }
+  @media screen and (min-width: 768px) {
+    .card .product-thumbnail {
+      height: 20rem; } }
+  @media screen and (min-width: 992px) {
+    .card .product-thumbnail {
+      height: 10rem; } }
+  @media screen and (min-width: 1200px) {
+    .card .product-thumbnail {
+      height: 15rem; } }
+
+.add-to-cart-btn :focus, .add-to-cart-btn :active:focus, .add-to-cart-btn .active:focus {
+  outline: none !important;
+  outline-style: none;
+  box-shadow: none; }
+
+.quick-actions {
+  transition: opacity 0.5s;
+  opacity: 0;
+  visibility: hidden; }
+  .quick-actions :hover .action-container {
+    background-color: #0d6efd !important; }
+
+.add-btn {
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  height: 0rem;
+  opacity: 0;
+  visibility: hidden; }
+
+.product-item:hover .quick-actions {
+  opacity: 1;
+  visibility: visible; }
+.product-item:hover .add-btn {
+  opacity: 1;
+  height: 2rem;
+  visibility: visible; }
+.product-item:hover .product-thumbnail {
+  height: 18rem; }
+  @media screen and (min-width: 768px) {
+    .product-item:hover .product-thumbnail {
+      height: 18rem; } }
+  @media screen and (min-width: 992px) {
+    .product-item:hover .product-thumbnail {
+      height: 8rem; } }
+  @media screen and (min-width: 1200px) {
+    .product-item:hover .product-thumbnail {
+      height: 13rem; } }
+
+.action-container {
+  width: 2rem;
+  height: 2rem; }
+
+/*# sourceMappingURL=product_card.css.map */

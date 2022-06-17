@@ -1,0 +1,16 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <h4 class="text-center text-uppercase py-3">{% trans 'Create your store' %}</h4>
+    <form method="post">{% csrf_token %}
+        {% include 'forms/store.html' %}
+        <div class="mb-3 row justify-content-center">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-dark my-2 text-uppercase fw-bold">{% trans 'Create' %}</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

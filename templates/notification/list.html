@@ -1,0 +1,61 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+<div class="container my-5">
+    <div class="d-flex justify-content-start my-2 hstack">
+        {% if hide_read %}
+        <button type="button" class="btn mx-1" id="unhide-read-noti">
+            <i class="fa fa-eye" aria-hidden="true"></i>
+            {% trans 'Unhide read notifications' %}
+        {% else %}
+        <button type="button" class="btn mx-1" id="hide-read-noti">
+            <i class="fa fa-eye-slash" aria-hidden="true"></i>
+            {% trans 'Hide read notifications' %}
+        {% endif %}
+        </button>
+        <div class="vr"></div>
+        <button type="button" class="btn mx-1 text-primary" id="mark-all-read-btn">
+            {% trans 'Read all' %}
+        </button>
+    </div>
+    <div class="container mt-3">
+        {% for object in object_list %}
+        <div class="row py-4 notification {% if object.status == 'Read' %} opacity-25 {% endif %}" item-id="{{object.id}}" role="button">
+            <div class="row justify-content-start mb-1">
+                <span class="text-muted">{{object.created_at|date:'H:m d/m/Y'}}</span>
+            </div>
+            <div class="row">
+                {% if object.action == 'Order' or object.action == 'Comment' %}
+                <img src="{% static 'img/store/store.jpg' %}" class="col-md-2 ms-3 p-0 rounded-circle avatar">
+                {% else %}
+                <img src="{{request.user.profile.avatar.url}}" class="col-md-2 ms-3 p-0 rounded-circle avatar">
+                {% endif %}
+                <div class="col-md-10 d-flex align-items-center">
+                    {% if object.action == 'Order' %}
+                    <a href="{% url 'pending_order' %}" target="_blank" class="text-decoration-none text-dark">
+                        {% blocktrans with id=object.target %}Your store has received a new order (#{{id}}){% endblocktrans %}
+                    </a>
+                    {% elif object.action == 'Comment' %}
+                    <a href="{{object.get_product.get_absolute_url}}" target="_blank" class="text-decoration-none text-dark">
+                        {% blocktrans with name=object.get_product.name %}Your product <b>{{name}}</b> has received a new comment{% endblocktrans %}
+                    </a>
+                    {% elif object.action == 'Accept' %}
+                    <a href="{% url 'order_history_detail' pk=object.target %}" target="_blank" class="text-decoration-none text-dark">
+                        {% blocktrans with id=object.target %}Your order (#{{id}}) has been accepted{% endblocktrans %}
+                    </a>
+                    {% elif object.action == 'Reject' %}
+                    <a href="{% url 'order_history_detail' pk=object.target %}" target="_blank" class="text-decoration-none text-dark">
+                        {% blocktrans with id=object.target %}Your order (#{{id}}) has been rejected{% endblocktrans %}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% include 'base/pagination.html' %}
+    </div>
+</div>
+<script type="module" src="{% static 'js/notification.js' %}"></script>
+{% endblock %}

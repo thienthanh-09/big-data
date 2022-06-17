@@ -1,0 +1,80 @@
+{% extends 'store_dashboard.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% block dashboard_item %}
+<div class="row my-5 align-items-center justify-content-center">
+    <div class="row w-75 border rounded p-4">
+        <div class="row mb-2">
+            <form method="get">
+                <input class="form-control" name="search" type="search" placeholder="{% trans 'Start typing to search for orders' %}" value="{{request.GET.search|default:''}}">
+            </form>
+        </div>
+        <div class="row mb-2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">{% trans 'Product' %}</th>
+                        <th scope="col">{% trans 'Category' %}</th>
+                        <th scope="col">{% trans 'Stock' %}</th>
+                        <th scope="col">{% trans 'Price' %}</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in object_list %}
+                    <tr {% if not product.available %}class="table-secondary"{% endif %}>
+                        <td class="py-3">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-4">
+                                    <img src="{{product.thumbnail.url}}" class="w-100" alt="{{product.name}}" style="height: 5rem; object-fit:contain;">
+                                </div>
+                                <div class="col-lg-10 col-md-8">
+                                    <span class="row">{{product.name}}</span>
+                                    <span class="row text-muted">ID: {{product.id}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 align-middle">{% trans product.category.name %}</td>
+                        <td class="py-3 align-middle" data-id="{{product.id}}">
+                            {% if product.quantity == 0 %}
+                            <span class="badge bg-danger add-quantity" role="button">{% trans 'Out of Stock' %}
+                            {% else %}
+                            <span class="badge bg-success add-quantity" role="button">{% blocktrans with product.quantity as quantity %}{{quantity}} in Stock{% endblocktrans %}
+                            {% endif %}
+                            </span>
+                        </td>
+                        <td class="py-3 align-middle">
+                            {% if product.sale.valid and product.sale.price < product.price %}
+                            <span class="text-decoration-line-through text-danger">${{product.price|intcomma}}</span>
+                            <span class="text-dark" id="new-price">${{product.sale.price|intcomma}}</span>
+                            {% else %}
+                                <span class="text-dark">${{product.price|intcomma}}</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 align-middle">
+                            <div class="dropdown">
+                                <button type="button" class="btn" id="id-{{product.id}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" data-id="{{product.id}}" aria-labelledby="id-{{product.id}}">
+                                    <li><a class="dropdown-item" href="{{product.get_absolute_url}}">{% trans 'Visit' %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'update_product' pk=product.id %}">{% trans 'Edit' %}</a></li>
+                                    <li><a class="dropdown-item sales-btn" href="#">{% trans 'Sale' %}</a></li>
+                                    <li><a class="dropdown-item text-danger delete-product-btn" href="#">{% trans 'Delete' %}</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row mb-2">
+            {% include 'base/pagination.html' %}
+        </div>
+    </div>
+</div>
+{% include 'components/quick_modal.html' %}
+<script type="module" src="{% static 'js/dashboard/products.js' %}"></script>
+{% endblock %}

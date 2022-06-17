@@ -1,0 +1,159 @@
+{% extends 'store_dashboard.html' %}
+{% load i18n %}
+{% load static %}
+{% block dashboard_item %}
+<div class="container m-5">
+    <div class="text-uppercase text-center my-5 fs-2 fw-bold">
+        {% if is_update %}
+            {% trans 'Update product' %}
+        {% else %}
+            {% trans 'Add product' %}
+        {% endif %}
+    </div>
+    <form enctype="multipart/form-data" method="post">{% csrf_token %}
+        <div class="mb-3">
+            <label for="{{form.name.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.name.label}}</label>
+            <input type="text" name="{{form.name.html_name}}" id="{{form.name.html_name}}" class="form-control" value="{{form.name.value|default:''}}">
+            <div class="form-text">
+                {{form.name.errors}}
+            </div>
+            {% if form.name.help_text %}
+                <div class="form-text">
+                    {{form.name.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{form.description.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.description.label}}</label>
+            <textarea name="{{form.description.html_name}}" id="{{form.description.html_name}}" class="form-control">{{form.description.value|default:''}}</textarea>
+            <div class="form-text">
+                {{form.description.errors}}
+            </div>
+            {% if form.description.help_text %}
+                <div class="form-text">
+                    {{form.description.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{form.thumbnail.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.thumbnail.label}}</label>
+            {% if form.thumbnail.value %}
+            <div class="row">
+                <div class="d-flex justify-content-center my-2">
+                    <img src="{{form.thumbnail.value.url}}" height="200px">
+                </div>
+            </div>
+            {% endif %}
+            <input type="file" name="{{form.thumbnail.html_name}}" accept="image/*" id="{{form.thumbnail.id_for_label}}" class="image-size-validate form-control">
+            <div class="form-text">
+                {{form.thumbnail.errors}}
+            </div>
+            {% if form.thumbnail.help_text %}
+                <div class="form-text">
+                    {{form.thumbnail.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold text-uppercase">{% trans 'Images' %}</label>
+            <div class="row mb-2" id="image-container">
+                {% for item in images %}
+                    <div class="col-md-auto m-1" data-image-id="{{item.id}}">
+                        <img src="{{item.image.url}}" class="img-thumbnail product-image" role="button" data-id="{{item.id}}" style="height: 100px !important;">
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-text my-1">
+                {% trans 'Click image to remove from product' %}
+            </div>
+            <input type="file" name="images" accept="image/*" class="image-size-validate form-control" multiple>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold text-uppercase">{% trans 'Videos' %}</label>
+            <div class="row mb-2" id="video-container">
+                {% for item in videos %}
+                    <div class="row mb-3" data-video-id="{{item.id}}">
+                        <div class="row mb-1">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-10">
+                                    <video class="d-block w-100 container" height="400px" controls>
+                                        <source src="{{item.video.url}}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger m-auto p-auto btn-sm remove-video-btn" data-id="{{item.id}}">
+                                    <i class="fas fa-trash-alt"></i>
+                                    {% trans 'Remove video' %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <input type="file" name="videos" accept="video/mp4" class="image-size-validate form-control" multiple>
+        </div>
+        <div class="mb-3">
+            <label for="{{form.price.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.price.label}}</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" name="{{form.price.html_name}}" id="{{form.price.html_name}}" class="form-control" value="{{form.price.value|default:'0'}}">    
+            </div>
+            <div class="form-text">
+                {{form.price.errors}}
+            </div>
+            {% if form.price.help_text %}
+                <div class="form-text">
+                    {{form.price.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{form.quantity.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.quantity.label}}</label>
+            <input type="text" name="{{form.quantity.html_name}}" id="{{form.quantity.html_name}}" class="form-control" value="{{form.quantity.value|default:'0'}}">
+            <div class="form-text">
+                {{form.quantity.errors}}
+            </div>
+            {% if form.quantity.help_text %}
+                <div class="form-text">
+                    {{form.quantity.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{form.category.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.category.label}}</label>
+            <select type="text" name="{{form.category.html_name}}" id="{{form.category.html_name}}" class="form-control" value="{{form.category.value|default:''}}">
+                {% for option in category %}
+                    <option value="{{option.id}}" {% if option.id == form.category.value %} selected {% endif %}>{% trans option.name %}</option>
+                {% endfor %}
+            </select>
+            <div class="form-text">
+                {{form.category.errors}}
+            </div>
+            {% if form.category.help_text %}
+                <div class="form-text">
+                    {{form.category.help_text}}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <label for="{{form.available.id_for_label}}" class="form-check-label">{% trans 'Show product to the public' %}</label>
+                <input type="checkbox" name="{{form.available.html_name}}" id="{{form.available.html_name}}" class="form-check-input" {% if form.available.value %}checked{% endif %}>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            {% if is_update %}
+                <button type="submit" class="btn btn-primary mx-1">{% trans 'Save' %}</button>
+            {% else %}
+                <button type="submit" class="btn btn-info mx-1">{% trans 'Create' %}</button>
+            {% endif %}
+            <a name="" id="" class="btn btn-danger mx-1" href="{% url 'dashboard_products' %}" role="button">{% trans 'Cancel' %}</a>
+        </div>
+    </form>
+    <script type="module" src="{% static 'js/product-update.js' %}"></script>
+</div>
+{% endblock %}

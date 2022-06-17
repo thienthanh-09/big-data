@@ -1,0 +1,127 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% load get_params %}
+{% load humanize %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/products_page.css' %}">
+<link rel="stylesheet" href="{% static 'css/product_card.css' %}">
+<link rel="stylesheet" href="{% static 'css/product_list_item.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="accordion accordion-flush sticky-top">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#product-type-panel" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <span class="fw-bold text-uppercase">{% trans 'Product type' %}</span>
+                        </button>
+                    </div>
+                    <div id="product-type-panel" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% for cat in categories %}
+                                    {% if cat.id|stringformat:"i" == request.GET.category %}
+                                        <a class="text-muted colored-primary-hover text-decoration-none selected" href="?{% remove_params category=cat.id page=1%}" role="button">{% trans cat.name %}</a>         
+                                    {% else %}
+                                        <a class="text-muted colored-primary-hover text-decoration-none" href="?{% reget_params category=cat.id page=1 %}" role="button">{% trans cat.name %}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#price-panel" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <span class="fw-bold text-uppercase">{% trans 'Price' %}</span>
+                        </button>
+                    </div>
+                    <div id="price-panel" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% for range in price_range %}
+                                    {% if request.GET.price_from == range.0|stringformat:"i" %}
+                                        <a class="text-muted colored-primary-hover text-decoration-none selected" href="?{% remove_params price_from=range.0 price_to=range.1 page=1 %}" role="button">${{range.0|intcomma}} - ${{range.1|intcomma}}</a>
+                                    {% else %}
+                                        <a class="text-muted colored-primary-hover text-decoration-none" href="?{% reget_params price_from=range.0 price_to=range.1 page=1 %}" role="button">${{range.0|intcomma}} - ${{range.1|intcomma}}</a>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if request.GET.price_from == '1000' %}
+                                    <a class="text-muted colored-primary-hover text-decoration-none selected" href="?{% remove_params price_from=1000 price_to='max' page=1 %}" role="button">$1,000+</a>
+                                {% else %}
+                                    <a class="text-muted colored-primary-hover text-decoration-none" href="?{% reget_params price_from=1000 price_to='max' page=1 %}" role="button">$1,000+</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#rating-panel" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <span class="fw-bold text-uppercase">{% trans 'Rating' %}</span>
+                        </button>
+                    </div>
+                    <div id="rating-panel" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% for _ in '1234' %}
+                                    {% if request.GET.rating == forloop.counter|stringformat:"i" %}
+                                    <a class="text-muted colored-primary-hover text-decoration-none selected" href="?{% remove_params rating=forloop.counter page=1 %}" role="button">{{forloop.counter}}+ <i class="fa-solid fa-star fa-2xs text-warning"></i></a>
+                                    {% else %}
+                                    <a class="text-muted colored-primary-hover text-decoration-none" href="?{% reget_params rating=forloop.counter page=1 %}" role="button">{{forloop.counter}}+ <i class="fa-solid fa-star fa-2xs text-warning"></i></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sort-panel" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <span class="fw-bold text-uppercase">{% trans 'Sort' %}</span>
+                        </button>
+                    </div>
+                    <div id="sort-panel" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% if request.GET.sort == 'name' %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover selected" href="?{% remove_params sort='name' page=1 %}"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i> {% trans 'Name ascending' %}</a>
+                                {% else %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover" href="?{% reget_params sort='name' page=1 %}"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i> {% trans 'Name ascending' %}</a>
+                                {% endif %}
+
+                                {% if request.GET.sort == '-name' %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover selected" href="?{% remove_params sort='-name' page=1 %}"><i class="fa fa-sort-alpha-desc" aria-hidden="true"></i> {% trans 'Name descending' %}</a>
+                                {% else %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover" href="?{% reget_params sort='-name' page=1 %}"><i class="fa fa-sort-alpha-desc" aria-hidden="true"></i> {% trans 'Name descending' %}</a>
+                                {% endif %}
+
+                                {% if request.GET.sort == 'price' %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover selected" href="?{% remove_params sort='price' page=1 %}"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i> {% trans 'Price ascending' %}</a>
+                                {% else %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover" href="?{% reget_params sort='price' page=1 %}"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i> {% trans 'Price ascending' %}</a>
+                                {% endif %}
+
+                                {% if request.GET.sort == '-price' %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover selected" href="?{% remove_params sort='-price' page=1 %}"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> {% trans 'Price descending' %}</a>
+                                {% else %}
+                                <a class="text-decoration-none text-dark fs-6 colored-primary-hover" href="?{% reget_params sort='-price' page=1 %}"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> {% trans 'Price descending' %}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% include 'base/product_list.html' %}
+            {% include 'base/pagination.html' %}
+        </div>
+    </div>
+</div>
+<script type="module" src="{% static 'js/product-card.js' %}"></script>
+{% include 'components/quick_modal.html' %}
+{% endblock %}

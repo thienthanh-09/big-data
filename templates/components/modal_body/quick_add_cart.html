@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load humanize %}
+<div class="hstack gap-3">
+    <div class="row w-50 justify-content-center">
+        <span class="text-success text-center fw-bold"><i class="fa fa-check" aria-hidden="true"></i> {% trans 'Added to cart successfully' %}!</span>
+        <img class="w-75 my-2 img-fluid" src="{{product.thumbnail.url}}">
+        <span class="text-center text-truncate" id="product-name-modal"></span>
+        <span class="text-center fw-bold">{% trans 'Qty' %}: 1</span>
+        <span class="text-center fw-bold">{% trans 'Total' %}: $<span class="text-center fw-bold">{{product.sell_price}}</span></span>
+    </div>
+    <div class="vr"></div>
+    <div class="row w-50">
+        <div class="row my-1 justify-content-center">
+            <div class="col-md-6">
+                <div class="row">
+                    <button type="button" class="btn btn-outline-primary fw-bold" data-bs-dismiss="modal" data-bs-target="#quick-modal">{% trans 'Continue shopping' %}</button>
+                </div>
+            </div>
+        </div>
+        <div class="row my-1 justify-content-center">
+            <div class="col-md-6">
+                <div class="row">
+                    <a class="btn btn-outline-primary fw-bold" href="{% url 'cart' %}" role="button">{% trans 'View cart' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+.accordion {
+  background-color: white;
+  top: 100px; }
+
+.accordion-button {
+  background-color: white !important; }
+
+.colored-primary-hover:hover {
+  color: #0d6efd !important;
+  font-weight: bold; }
+
+.selected {
+  color: #0d6efd !important;
+  font-weight: bold; }
+
+/*# sourceMappingURL=products_page.css.map */

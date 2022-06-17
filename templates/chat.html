@@ -1,0 +1,123 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+{% block content %}
+<div class="row border rounded">
+    <div class="col-md-12 col-lg-4 col-xxl-3 border">
+        <div class="flex-column h-100">
+            <div class="row justify-content-center py-3 border-bottom">
+                <div class="col-auto dropdown">
+                    <a class="btn dropdown-toggle text-uppercase" href="#" role="button" id="role-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% trans role %}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="role-dropdown">
+                        <li><a class="dropdown-item" href="?role=user">{% trans 'User' %}</a></li>
+                        <li><a class="dropdown-item" href="?role=store">{% trans 'Store' %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="name-search-input" class="form-control" value="{{search}}" placeholder="{% trans 'Search' %}">
+                </div>
+            </div>
+            <script>
+                window.role = "{{role}}";
+            </script>
+            <div class="row border-bottom h-100">
+                <div id="chat-receiver" class="h-100" style="overflow-y:auto; overflow-x:hidden;">
+                    {% for chat in chat_stores %}
+                    <div class="row border rounded m-3 py-3 destinator" data-id="{{chat.store.id}}" role="button">
+                        <div class="col-sm-auto">
+                            <div class="position-relative">
+                                <img src="{% static 'img/store/store.jpg' %}" class="rounded-circle avatar" alt="">
+                                {% if chat.store.owner.profile.is_online %}
+                                <span class="position-absolute top-0 start-100 translate-middle p-2 text-success fw-bold">●</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="row">
+                                <span class="fw-bold">
+                                    {{chat.store.name}}
+                                </span>
+                            </div>
+                            <div class="row">
+                                <span> {% trans 'Tel' %}:
+                                {{chat.store.phone}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% for chat in chat_users %}
+                    <div class="row border rounded m-3 py-3 destinator" data-id="{{chat.user.id}}" role="button">
+                        <div class="col-sm-auto">
+                            {% if chat.user.profile.avatar %}
+                            <div class="position-relative">
+                                <img src="{{chat.user.profile.avatar.url}}" class="rounded-circle avatar" alt="">
+                                {% if chat.user.profile.is_online %}
+                                <span class="position-absolute top-0 start-100 translate-middle p-2 text-success fw-bold">●</span>
+                                {% endif %}
+                            </div>
+                            {% else %}
+    
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="row">
+                                <span class="fw-bold">
+                                    {{chat.user.username}}
+                                </span>
+                            </div>
+                            <div class="row">
+                                <span> {% trans 'Tel' %}:
+                                {{chat.user.profile.phone}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-8 col-xxl-9 d-flex flex-column">
+        <div class="row my-auto">
+            <div class="mb-auto messages d-flex flex-column p-5" style="overflow-y:auto; overflow-x:hidden; height: 80vh;">
+            </div>
+        </div>
+        <div class="py-2 row border-top justify-content-center">
+            <div class="col-auto">
+                {% csrf_token %}
+                <input type="file" id="image-input" accept="image/*" hidden>
+                <button type="button" class="btn" id="image-btn">
+                    <i class="fas fa-image"></i>
+                </button>
+            </div>
+            <div class="col-auto">
+                <div class="dropup">
+                    <button type="button" class="btn" aria-haspopup="true" data-bs-toggle="dropdown" aria-expanded="false" id="emoji-btn">
+                        <i class="fa fa-smile-o" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu row" style="width: 50vw; max-height: 30vh; overflow:auto" aria-labelledby="emoji-btn">
+                        <span class="emoji-list m-0 p-0"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="chat-input" placeholder="{% trans 'Type your message here...' %}">
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary rounded-circle" id="send-button">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'components/image_viewer.html' %}
+<script src="{% static 'emoji/js/emoji.js' %}"></script>
+<script type="module" src="{% static 'js/chat.js' %}"></script>
+{% endblock %}

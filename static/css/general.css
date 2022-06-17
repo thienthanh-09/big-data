@@ -1,0 +1,29 @@
+.text-orange {
+  color: #f7941d !important; }
+
+.bg-orange {
+  background-color: #f7941d !important; }
+
+.bg-orange-light {
+  background-color: #f7b752 !important; }
+
+.bg-secondary-light {
+  background-color: #f7f8fa !important; }
+
+.btn-orange {
+  background-color: #f7941d !important;
+  border-color: #f7941d !important; }
+
+.btn-orange-light {
+  background-color: #f7b752 !important;
+  border-color: #f7b752 !important; }
+
+.border-orange {
+  border-color: #f7941d !important; }
+
+.avatar {
+  object-fit: cover;
+  height: 4rem;
+  width: 4rem; }
+
+/*# sourceMappingURL=general.css.map */

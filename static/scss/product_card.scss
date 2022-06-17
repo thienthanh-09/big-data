@@ -1,0 +1,79 @@
+@import 'variables';
+
+.card .product-thumbnail {
+    transition: height 0.3s ease-in-out;
+    height: 20rem;
+
+    @media screen and (min-width: $md){
+        height: 20rem;
+    }
+
+    @media screen and (min-width: $lg){
+        height: 10rem;
+    }
+
+    @media screen and (min-width: $xl){
+        height: 15rem;
+    }
+}
+
+.add-to-cart-btn {
+    :focus, :active:focus, .active:focus {
+        outline: none !important;
+        outline-style: none;
+        box-shadow:none;
+    }
+}
+
+.quick-actions {
+    transition: opacity 0.5s;
+    opacity: 0;
+    visibility: hidden;
+
+    :hover .action-container {
+        background-color: $blue !important;
+    }
+}
+
+.add-btn {
+    transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    height: 0rem;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.product-item {
+    &:hover {
+        .quick-actions {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .add-btn {
+            opacity: 1;
+            height: 2rem;
+            visibility: visible;
+        }
+
+        .product-thumbnail {
+            height: 18rem;
+        
+            @media screen and (min-width: $md){
+                height: 18rem;
+            }
+        
+            @media screen and (min-width: $lg){
+                height: 8rem;
+            }
+        
+            @media screen and (min-width: $xl){
+                height: 13rem;
+            }
+        }
+    }
+}
+
+.action-container {
+    width: 2rem;
+    height: 2rem;
+}

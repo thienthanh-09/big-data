@@ -1,0 +1,109 @@
+{% load i18n %}
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-3 sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-decoration-none" href="/">
+            <i class="fa-solid fa-store"></i>
+            Store
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-decoration-none text-uppercase {% if title == _('Home') %}active text-orange{% endif %}" href="/">
+                        {% trans 'Home' %}
+                    </a>
+                </li>
+                <li class="nav-item dropdown dropdown-hover">
+                    <a class="nav-link text-decoration-none text-uppercase" href="#">
+                        {% trans 'Categories' %}
+                    </a>
+                    <div class="dropdown-menu p-2" style="min-width: 50rem;">
+                        <div class="row">
+                        {% for cat in categories %}
+                        <div class="col-md-4">
+                            <a class="dropdown-item" href="{% url 'products' %}?category={{cat.id}}">
+                                {% trans cat.name %}
+                            </a>
+                        </div>
+                        {% if forloop.counter|divisibleby:3 %}
+                        </div>
+                        <div class="row">
+                        {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-decoration-none text-uppercase {% if title == _('Products') %}active text-orange{% endif %}" href="{% url 'products' %}">
+                        {% trans 'Products' %}
+                    </a>
+                </li>
+            </ul>
+            <div class="row justify-content-end align-items-center">
+                {% if user.is_authenticated %}
+                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Cart' %}">
+                    <a href="{% url 'cart' %}" class="text-decoration-none text-dark">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Notification' %}">
+                    <a href="{% url 'notification' %}" class="text-decoration-none text-dark">
+                        <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Account' %}">
+                    <div class="dropdown">
+                        <i class="fa fa-user" data-bs-toggle="dropdown" aria-hidden="true"></i>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/chat/">
+                                {% trans 'Chat' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="/me/store/">
+                                {% trans 'Store Dashboard' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'account' %}">
+                                {% trans 'Account' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'order_history' %}">
+                                {% trans 'History' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'favorite_product' %}">
+                                {% trans 'Favorite' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="/logout/">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                {% trans 'Logout' %}
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-auto">
+                    <a href="{% url 'login' %}" role="button" class="text-dark">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </a>
+                </div>
+                {% endif %}
+                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Settings' %}">
+                    <div class="dropdown">
+                        <i class="fa fa-sliders" data-bs-toggle="dropdown" aria-hidden="true"></i>
+                        <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 20rem;">
+                            <div class="row mb-2">
+                                {% include 'components/change_language_form.html' %}
+                            </div>
+                            <div class="row mb-2">
+                                {% include 'components/change_timezone_form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<script type="module" src="{% static 'js/navbar.js' %}"></script>

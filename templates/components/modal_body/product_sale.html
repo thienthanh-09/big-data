@@ -1,0 +1,54 @@
+{% load i18n %}
+<div class="row m-1 pt-2">
+    <span class="text-uppercase fw-bold text-center">{% trans 'Product sale' %}</span>
+</div>
+<div class="row m-1 pt-2">
+    <div class="col-md-3">
+        {% trans 'Type' %}
+    </div>
+    <div class="col-md-9">
+        <div class="form-check">
+            <input class="form-check-input sale-choice" type="checkbox" value="P" {% if product.sale and product.sale.valid and product.sale.sale_type == 'P' %} checked {% endif %}>
+            <label class="form-check-label">{% trans 'Percentage' %}</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input sale-choice" type="checkbox" value="F" {% if product.sale and product.sale.valid and product.sale.sale_type == 'F' %} checked {% endif %}>
+            <label class="form-check-label">{% trans 'Fixed' %}</label>
+        </div>
+    </div>
+</div>
+<div class="row m-1 pt-2">
+    <div class="col-md-3">
+        {% trans 'Value' %}
+    </div>
+    <div class="col-md-9">
+        <div class="input-group">
+            <span class="input-group-text" id="sale-value-symbol">%</span>
+            <input type="number" class="form-control" id="sale-value" min="0" {% if product.sale and product.sale.valid %} value="{{product.sale.value}}" {% endif %}>
+        </div>
+    </div>
+</div>
+<div class="row m-1 pt-2">
+    <div class="col-md-3">
+        {% trans 'Duration' %}
+    </div>
+    <div class="col-md-9">
+        <div class="input-group">
+            <input type="number" class="form-control" id="sale-duration" min="0">
+            <span class="input-group-text">{% trans 'day(s)' %}</span>
+        </div>
+    </div>
+</div>
+<div class="m-1 pt-2 fw-bold text-center" id="modal-product-name">
+    {{product.name}}
+</div>
+<div class="m-1 pt-2 text-center" id="modal-product-price">
+    <span class="text-decoration-line-through text-danger" id="original-price">{{product.price}}</span>
+    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+    <span class="text-success" id="sale-price">{% if product.sale and product.sale.valid %}{{product.sale.value}}{% endif %}</span>
+</div>
+<div class="row m-1 pt-2 justify-content-end">
+    <button type="button" class="col-auto mx-1 btn btn-secondary" data-bs-dismiss="modal">{% trans 'Close' %}</button>
+    <button type="button" class="col-auto mx-1 btn btn-danger" data-id="{{product.id}}" id="sale-remove-btn">{% trans 'Remove' %}</button>
+    <button type="button" class="col-auto mx-1 btn btn-primary" data-id="{{product.id}}" id="sale-confirm-btn">{% trans 'Confirm' %}</button>
+</div>

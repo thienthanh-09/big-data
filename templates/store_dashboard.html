@@ -1,0 +1,80 @@
+{% extends 'base/base_nav_no_footer.html' %}
+{% load i18n %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/store_dashboard.css' %}">
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-2 fit-screen border-end">
+        <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="general-heading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#general-collapse" aria-expanded="true" aria-controls="general-collapse">
+                    {% trans 'General' %}
+                </button>
+                </h2>
+                <div id="general-collapse" class="accordion-collapse collapse show" aria-labelledby="general-heading">
+                <div class="accordion-body">
+                    <div class="row">
+                        <a href="{% url 'dashboard_store' %}" class="session {% if sname == 'store' %} session-active {% endif %}">{% trans 'Store' %}</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    {% trans 'Product' %}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
+                    <div class="row">
+                        <a href="{% url 'dashboard_products' %}" class="session {% if sname == 'products' %} session-active {% endif %}">{% trans 'Product List' %}</a>
+                    </div>
+                    <div class="row">
+                        <a href="{% url 'add_product' %}" class="session {% if sname == 'add_product' %} session-active {% endif %}">{% trans 'Create Product' %}</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                    {% trans 'Order' %}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+                <div class="accordion-body">
+                    <div class="row">
+                        <a href="{% url 'pending_order' %}" class="session {% if sname == 'pending' %} session-active {% endif %}">{% trans 'Pending Orders' %}</a>
+                    </div>
+                    <div class="row">
+                        <a href="{% url 'dashboard_history' %}" class="session {% if sname == 'history' %} session-active {% endif %}">{% trans 'History' %}</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    {% trans 'Statistic' %}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <div class="row">
+                        <a href="{% url 'dashboard_statistic' %}" class="session {% if sname == 'statistic' %} session-active {% endif %}">{% trans 'Statistic' %}</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10 fit-screen">
+        {% block dashboard_item %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

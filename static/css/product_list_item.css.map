@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAGI,qCAAmB;EACf,MAAM,EAAE,KAAK;EAEb,oCAAmC;IAHvC,qCAAmB;MAIX,MAAM,EAAE,KAAK",
+"sources": ["../scss/product_list_item.scss"],
+"names": [],
+"file": "product_list_item.css"
+}
