@@ -4,7 +4,7 @@
 {% load get_params %}
 <div class="row p-2 border-top rounded product-list-item" item-url="{{item.get_absolute_url}}" role="button">
     <div class="col-md-12 col-lg-3 d-flex align-items-center position-relative">
-        <img src="{{item.thumbnail.url}}" class="w-100 product-thumbnail" style="object-fit: contain;" alt="">
+        <img src="{{item.thumbnail}}" class="w-100 product-thumbnail" style="object-fit: contain;" alt="">
         <div class="position-absolute top-0 start-0">
             {% if item.sell_price < item.price %}
                 {% if item.sale.sale_type == 'F' %}

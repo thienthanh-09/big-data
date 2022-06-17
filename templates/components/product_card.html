@@ -46,7 +46,11 @@
             </div>
         </div>
         <div class="text-truncate text-primary product-name">
-            {{item.name}}
+            <a class="col-auto fw-bold text-decoration-none" href="{{item.get_absolute_url}}">
+                <a class="col-auto fw-bold text-decoration-none" href="{{item.get_absolute_url}}">
+                    {{item.name}}
+                </a>
+            </a>
         </div>
         <p class="card-text d-flex justify-content-between">
             <span class="price-hover fw-bold" item-value="{{item.sell_price}}">
