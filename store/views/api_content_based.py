@@ -6,8 +6,8 @@ import re
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
-from ..models import Product
-import random
+# from ..models import Product
+# import random
 
 product_data = pd.read_csv('I:\project\scripts\89_ds.204_Product.csv')
 
@@ -48,8 +48,6 @@ def recommend_product_based_on_description(product_input):
     recommendations = [(productid, score) for productid, score in similarity_score]
     return recommendations
 
-input = Product.objects.get(id=random.randint(1, 90))
-print(input)
-result = recommend_product_based_on_description(input)
+result = recommend_product_based_on_description(18)
 a = [i[0] for i in result if i[1] > 0]
 print(a)

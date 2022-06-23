@@ -123,12 +123,23 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-auto">
-                        <span class="fw-bold {% if liked %}text-danger{% endif %}" role="button" id="like-product-btn" product-id="{{object.id}}">
-                            <a style="tex-decoration:none; " href="{% url store:like}"></a>
-                            <i class="fa {% if liked %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
-                            <span id="fav_text">{% if liked %}{% trans 'Remove from Favorited products' %}{% else %}{% trans 'Add to Favorited products' %}{% endif %}
+                        {% if user.is_authenticated %}
+                        <form action="#">
+                            <span class="fw-bold {% if liked %}text-danger{% endif %}" role="button" id="like-product-btn" product-id="{{object.id}}">
+                                <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                                <a type="submit" style="text-decoration:none;" href="#">
+                                    <i class="fa {% if liked %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
+                                    <span id="fav_text">{% if liked %}{% trans 'Remove from Favorited products' %}{% else %}{% trans 'Add to Favorited products' %}{% endif %}
+                                    </span>
+                                </a>
                             </span>
-                        </span>
+                        </form>
+                        {% else %}
+                        <p>
+                            You must be logged in like it.
+                            <span><a href="/login">Login now</a></span>
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row mb-2">

@@ -135,7 +135,7 @@ class Home(TemplateView):
         
         result = recommend_product_pearson_(user_input)
         user_based_list = [i[0] for i in result if i[1] >= 4]
-        user_based_list = user_based_list[0:10]
+        user_based_list = user_based_list[0:29]
 
         my_filter_user_based = Q()
         for user_based in user_based_list:
@@ -148,7 +148,7 @@ class Home(TemplateView):
                 product.favorited = product.id in favorited_products 
             return context
         else:
-            context['recommended_products'] = Product.objects.filter(my_filter_user_based)[:12]            
+            context['recommended_products'] = Product.objects.filter(my_filter_user_based)[:15]            
             for product in context['recommended_products']:
                 product.favorited = product.id in favorited_products 
             return context
@@ -319,28 +319,23 @@ class ProductView(View):
             })
         return JsonResponse(res, safe=False)
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.shortcuts import redirect, render, get_object_or_404
 class LikeProductView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        try:
-            product_id = self.kwargs['pk']
-            product = Product.objects.get(id=product_id)
-            LikedProduct.objects.get_or_create(user=request.user, product=product)
-            return JsonResponse({
-                'message': _('You liked this product'),
-            })
-        except Exception as e:
-            return HttpResponseBadRequest(e)
+    def add(self, request, *args, **kwargs):
+        product = Product.objects.get(id=self.kwargs['pk'])
+        product_input = product.id
+        user_ = self.request.user
+        user_input = user_.id
+        instance, created = LikedProduct.objects.get_or_create(user=user_input, product=product_input)
+        return JsonResponse({'message': _('You liked this product'),})
 
     def delete(self, request, *args, **kwargs):
-        try:
-            product_id = self.kwargs['pk']
-            product = Product.objects.get(id=product_id)
-            LikedProduct.objects.filter(user=request.user, product=product).delete()
-            return JsonResponse({
-                'message': _('You unliked this product'),
-            })
-        except Exception as e:
-            return HttpResponseBadRequest(e)
+        product_id = self.kwargs['pk']
+        product = Product.objects.get(id=product_id)
+        LikedProduct.objects.filter(user=request.user, product=product).delete()
+        return JsonResponse({'message': _('You unliked this product'),})
 
 class FavoriteProduct(LoginRequiredMixin, ListView):
     model = Product

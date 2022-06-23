@@ -31,7 +31,9 @@ urlpatterns = [
     path('account/change-password/', account.ChangePasswordView.as_view(), name='change_password'),
     path('store/<slug>/', store.StoreView.as_view(), name='store'),
 
-    path('product/<pk>/like/', product.LikeProductView.as_view(), name='like'),
+    # path('product/<pk>/like/', product.LikeProductView.as_view(), name='like'),
+    path('add-wishlist/', product.LikeProductView.add, name='like'),
+    path('remove-wishlist/<int:wishlist_id>/', product.LikeProductView.delete, name="remove-wishlist"),
     path('favorite/', product.FavoriteProduct.as_view(), name='favorite_product'),
 
     path('me/store/', store.MyStoreView.as_view()),

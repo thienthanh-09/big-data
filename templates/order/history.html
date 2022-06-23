@@ -2,9 +2,61 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-<div class="container mb-5">
+<div class="container">
     <h4 class="m-3 text-center">{% trans 'Order History' %}</h4>
-    {% include 'components/order_list.html' %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% trans 'Date' %}</th>
+                <th scope="col">{% trans 'Order' %}</th>
+                <th scope="col" class="text-end">{% trans 'Cost' %}</th>
+                <th scope="col" class="text-center">{% trans 'Status' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{object.created_at}}</td>
+                <td>{% trans 'Order' %} #{{object.id}}</td>
+                <td class="text-end">{{object.cost}} USD</td>
+                <td class="{% if object.status == 'Pending' %} text-warning 
+                        {% elif object.status == 'Accepted' %} text-success
+                        {% elif object.status == 'Rejected' %} text-danger 
+                        {% endif %} text-center">
+                        <b>{% trans object.status %}</b></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <table class="table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col">{% trans 'Products' %}</th>
+                                <!-- <th scope="col">{% trans 'Quantity' %}</th>
+                                <th scope="col">{% trans 'Price' %}</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in object.detail %}
+                            <tr>
+                                <td>
+                                    <a class="text-decoration-none" href="{% url 'product_detail' product_id=detail.product.id %}">
+                                        {{detail.product.name}}
+                                    </a><b>x{{detail.quantity}}</b></td>
+                                <!-- <td>{{detail.quantity}}</td>
+                                <td>{{detail.product.price}}</td> -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <div class="">
+        {% endfor %}
+        </tbody>
+    </table>
+    
     {% include 'base/pagination.html' %}
 </div>
 {% endblock %}

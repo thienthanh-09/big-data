@@ -118,6 +118,9 @@ class LikedProduct(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return str(self.user)
+    
 class ProductSale(models.Model):
     SALE_TYPE = [
         ('P', 'Percentage'),
