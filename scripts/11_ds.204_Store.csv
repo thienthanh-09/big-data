@@ -1,0 +1,12 @@
+id,name,description,phone,address,slug,owner
+0,Mộc,Doan xemmm,123456789,"34 đường Hai Bà Trưng, phường Linh Trung",moc-store,1
+1,Dottie,Doan xemmm,123456789,"01 Công xã Paris, Bến Nghé",dottie-store,0
+2,Bloomode,Doan xemmm,123456789,"1/47 Bình Đường 1, An Bình",bloomode-store,3
+3,Yume,Doan xemmm,123456789,"Lê Hồng Phong, khu phố Đông Chiêu",yume-store,4
+4,Lily,Doan xemmm,123456789,"214 Phước Tân, Bình Tân",lily-store,5
+5,Boo,Doan xemmm,123456789,"Tô Vĩnh Diện, Đường Đ. Mạc Đĩnh Chi, Đông Hoà",boo-store,6
+6,Xinh,Doan xemmm,123456789,"Q4W3+V2C, Nhân Vũ",xinh-store,2
+7,Mây,Doan xemmm,123456789,"121 Dư Hàng, Hồ Nam",may-store,7
+8,GOM,Doan xemmm,123456789,"23RV+9RR, Unnamed Road",GOM-store,8
+9,Giangnam,Doan xemmm,123456789,"02 đường D5, Phường Phước Mỹ,  Mỹ Sơn",giangnam-store,9
+10,TheCups,Doan xemmm,123456789,"5949+4XR, ĐT722, Đa M'Rong",thecups-store,10

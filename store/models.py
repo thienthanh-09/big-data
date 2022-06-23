@@ -29,7 +29,7 @@ class Profile(models.Model):
     gender = models.CharField(_('Gender'), max_length=6, choices=GENDERS, blank=True)
     phone = models.CharField(_('Phone'), max_length=20, blank=True)
     address = models.CharField(_('Address'), max_length=200, blank=True)
-    avatar = models.ImageField(_('Avatar'), upload_to=get_profile_image_path, default='default/profile.png')
+    avatar = models.ImageField(_('Avatar'), upload_to=get_profile_image_path, default='http://hinhnenhd.com/wp-content/uploads/2021/08/Tai-ngay-avt-trang-fb-moi-nhat-dep-nhat-doc-dao-12.jpg')
     timezone = models.CharField(_('Timezone'), max_length=100, default='UTC')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     last_access = models.DateTimeField(auto_now=True)
@@ -53,7 +53,7 @@ class Store(models.Model):
     slug = models.SlugField(max_length=350, unique=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.slug = auto_slug(self.name, self.__class__)
+        self.slung = auto_slug(self.name, self.__class__)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -76,8 +76,10 @@ class Product(models.Model):
     store = models.ForeignKey(to=Store, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     rating_count = models.IntegerField(default=0)
+    cold_start = models.BooleanField(_('cold_start'), default=False)
     view = models.IntegerField(default=0)
     slug = models.SlugField(max_length=350, unique=True, null=True)
+    content_based = models.IntegerField(default=5)
 
     def save(self, *args, **kwargs):
         self.slug = auto_slug(self.name, self.__class__)
@@ -115,6 +117,7 @@ class ProductVideo(models.Model):
 class LikedProduct(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+    
 class ProductSale(models.Model):
     SALE_TYPE = [
         ('P', 'Percentage'),
@@ -142,6 +145,7 @@ class Comment(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
 class Order(models.Model):
     STATUS = [
         ('Cart', 'Cart'), # Product in cart

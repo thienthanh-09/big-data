@@ -13,7 +13,7 @@ id,image,product_id
 11, https://images-na.ssl-images-amazon.com/images/I/31SzTr6zAqL.jpg ,11
 12, https://images-na.ssl-images-amazon.com/images/I/213nhtnFvXL.jpg ,12
 13, https://images-na.ssl-images-amazon.com/images/I/31dBCDuSOoL.jpg ,13
-14,[https://m.media-amazon.com/images/I/81CVA3whKLL._SY355_.jpg],14
+14,https://m.media-amazon.com/images/I/81CVA3whKLL._SY355_.jpg,14
 15, https://images-na.ssl-images-amazon.com/images/I/51go2sFOuYL.jpg ,15
 16, https://images-na.ssl-images-amazon.com/images/I/31vfj7U7AoL.jpg ,16
 17, https://images-na.ssl-images-amazon.com/images/I/41DENlVR68L.jpg ,17
@@ -34,10 +34,10 @@ id,image,product_id
 32, https://images-na.ssl-images-amazon.com/images/I/41MGOvL7kIL.jpg ,32
 33, https://images-na.ssl-images-amazon.com/images/I/41xSn89msoL.jpg ,33
 34, https://images-na.ssl-images-amazon.com/images/I/51qh6IGmY3L.jpg ,34
-35,[https://m.media-amazon.com/images/I/51hpC3HXjHL._AC_.jpg],35
+35,https://m.media-amazon.com/images/I/51hpC3HXjHL._AC_.jpg,35
 36, https://images-na.ssl-images-amazon.com/images/I/51eXI2Hep6L.jpg ,36
 37, https://images-na.ssl-images-amazon.com/images/I/51wV3J2hQQL.jpg ,37
-38,[https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPIU2_M0ZGvfuMxo195xIxCRHdeQ7tdti8Cj9bJ_iDFSff1k5_oTzSPbDKaZvF3XeZM04&usqp=CAU],38
+38,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPIU2_M0ZGvfuMxo195xIxCRHdeQ7tdti8Cj9bJ_iDFSff1k5_oTzSPbDKaZvF3XeZM04&usqp=CAU,38
 39, https://images-na.ssl-images-amazon.com/images/I/41vobrnXEjL.jpg ,39
 40, https://images-na.ssl-images-amazon.com/images/I/41nfpj1bG4L.jpg ,40
 41, https://images-na.ssl-images-amazon.com/images/I/51Ji34KSs6L.jpg ,41

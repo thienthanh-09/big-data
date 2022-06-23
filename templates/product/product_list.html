@@ -1,0 +1,146 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="row sticky-top">
+    <div class="row d-flex justify-content-between align-middle" style="background-color: #019267;">
+        <div class="col-auto m-2">
+            <button type="button" name="" id="filter-btn" class="btn btn-warning">
+                <i class="fa fa-filter" aria-hidden="true"></i>
+                {% trans 'Filter' %}
+            </button>
+        </div>
+        <div class="col-6 m-2">
+            <form autocomplete="off" method="get" class="d-flex justify-content-center" id="form-search" action="/">
+                <div class="input-group">
+                    <input name="search" list="product-list" id="search-input" class="form-control" type="search" placeholder="{% trans 'Search' %}" aria-label="Search" value="{{search}}">
+                    <datalist id="product-list">
+                    </datalist>
+                    <input name="sort" type="hidden" value="{{sort|default:'popular'}}" id="h-sort">
+                    <input name="category" type="hidden" value="{{category}}" id="h-category">  
+                    <input name="from" type="hidden" value="{{from}}" id="h-from">  
+                    <input name="to" type="hidden" value="{{to}}" id="h-to">
+                    <input name="rate" type="hidden" value="{{rate}}" id="h-rate">
+                    <input name="show" type="hidden" value="{{show}}" id="h-show">  
+                    <button class="btn btn-warning" type="submit" id="submit-btn">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        {% trans 'Search' %}</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-auto m-2">
+            <select class="form-select bg-warning" name="" id="select-sort" selected-item="{{sort|default:'popular'}}">
+                <option value="low">{% trans 'Lowest price' %}</option>
+                <option value="high">{% trans 'Highest price' %}</option>
+                <option value="popular">{% trans 'Popular' %}</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="filter-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{% trans 'Products Filter' %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="col-auto">
+                        <label class="col-form-label">{% trans 'Category' %}</label>
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select" id="f-category">
+                            <option value="-1">{% trans 'All' %}</option>
+                            {% for type in categories %}
+                                <option value="{{type.id}}">{% trans type.name %}</a>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{% trans 'Price range' %}</label>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="number" class="form-control" id="f-from">
+                        </div>
+                        <div class="col-md-2 text-center">
+                            {% trans 'to' %}
+                        </div>
+                        <div class="col-md-5">
+                            <input type="number" class="form-control" id="f-to">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{% trans 'Rating' %}</label>
+                    <select class="form-select" id="f-rate">
+                        <option value="0">{% trans 'All' %}</option>
+                        <option value="30">{% trans 'Above 3 stars' %}</option>
+                        <option value="40">{% trans 'Above 4 stars' %}</option>
+                        <option value="45">{% trans 'Above 4.5 stars' %}</option>
+                    </select>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="f-show">
+                    <label class="form-check-label">{% trans 'Hide out of stock products' %}</label>
+                </div>
+            </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Close' %}</button>
+                <button type="button" class="btn btn-primary" id="filter-confirm-btn">{% trans 'Filter' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="ads">
+</div>
+<div class="container border-bottom border-top my-2">
+    <h5 class="my-2">{% trans 'Recommend products' %}</h5>
+    <div class="row overflow-auto">
+        {% for item in recommended_products %}
+        <div class="col-md-3">
+            <div class="card product-item mx-1 my-1 mb-4" item-id="{{item.id}}" role="button">
+                <img src="{{item.thumbnail.url}}" class="card-img-top" style="height: 200px;" alt="">
+                {% if item.quantity == 0 %}
+                <div class="card-img-overlay">
+                    <h5 class="badge bg-danger card-title">
+                        {% trans 'Out of stock'%}
+                    </h5>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">
+                        {{item.name}}
+                    </h5>
+                    <p class="card-text d-flex justify-content-between">
+                        <span>
+                        {% if item.productsale_set.all.first.valid %}
+                        <span class="text-decoration-line-through text-danger">{{item.price}}</span>
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        <span class="text-success" id="new-price">{{item.productsale_set.all.first.price}}</span>
+                        {% else %}
+                            {{item.price}}
+                        {% endif %} USD
+                        </span>
+                        {% if item.rate %}
+                        <span>{{item.rate|floatformat:1}} <i class="fa-solid fa-star"></i> ({{item.rate_count}})</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer text-muted text-center text-truncate">
+                    {% trans item.category.name %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="container">
+    {% include 'base/product_list.html' %}
+</div>
+<div class="container d-flex justify-content-center">
+    {% include 'base/pagination.html' %}
+</div>
+<script type="module" src="{% static 'js/product.js' %}"></script>
+{% endblock %}

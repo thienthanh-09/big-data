@@ -5,57 +5,25 @@ from typing import *
 from django import http
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
+from psutil import users
 
-from store.views.utils import djdb_log, navbar_context
-from ..models import OrderDetail, Product, Store, Order, Comment, ProductSale, ProductImage, ProductVideo, Category, LikedProduct
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
+from store.views.utils import navbar_context
+from ..models import OrderDetail, Product, Store, Order, Comment, ProductSale, ProductImage, ProductVideo, Profile
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .notification import create_notification
 from django.db.models import Count, Avg, Sum
 from ..forms.store import StoreForm
+import math
+from django.db.models import Q
+import numpy as np 
+import pandas as pd
 
-class ProductQuantity(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        product_id = self.kwargs.get('pk')
-        quantity = request.POST.get('quantity')
-        if not product_id or not quantity:
-            return HttpResponseBadRequest()
-        try:
-            quantity = int(quantity)
-            if quantity <= 0:
-                return HttpResponseBadRequest()
-        except ValueError:
-            return HttpResponseBadRequest()
-        try:
-            product = Product.objects.get(id=product_id)
-            product.quantity += quantity
-            product.save()
-        except Product.DoesNotExist:
-            return HttpResponseNotFound()
-        return HttpResponse()
 
 class StoreView(ListView):
     model = Product
     template_name = 'store/store.html'
     paginate_by = 16
-
-    def get_queryset(self):
-        search_data = self.request.GET.get('search', '')
-        queryset = Product.objects.filter(store__slug=self.kwargs['slug'], name__icontains=search_data, available=True).order_by('-sold')
-
-        if self.request.user.is_authenticated:
-            favorited_products = LikedProduct.objects.filter(user = self.request.user).values_list('product__id', flat = True)
-        else:
-            favorited_products = []
-        
-        for product in queryset:
-            if product.id in list(favorited_products):
-                product.favorited = True
-            else:
-                product.favorited = False
-            product.preview_description = product.description[:300] + '...' if len(product.description) > 300 else product.description
-        return queryset
 
     @navbar_context
     def get_context_data(self, **kwargs):
@@ -63,12 +31,30 @@ class StoreView(ListView):
         context['title'] = _('Store')
         context['store'] = Store.objects.get(slug=self.kwargs['slug'])
         return context
+class AddProductView(LoginRequiredMixin, CreateView):
+    model = Product
+    template_name = 'my_store/add_product.html'
+    fields = ('name', 'description', 'thumbnail', 'price', 'quantity', 'category', 'available', )
+    success_url = '/me/store/'
+
+    def form_valid(self, form):
+        form.instance.store = self.request.user.store
+        self.object = form.save()
+        images = self.request.FILES.getlist('images', None)
+        if images:
+            for image in images:
+                ProductImage.objects.create(product=self.object, image=image)
+        videos = self.request.FILES.getlist('videos', None)
+        if videos:
+            for video in videos:
+                ProductVideo.objects.create(product=self.object, video=video)
+        return super().form_valid(form)
 
 class UpdateProductView(LoginRequiredMixin, UpdateView):
     model = Product
     template_name = 'my_store/add_product.html'
     fields = ('name', 'description', 'thumbnail', 'price', 'quantity', 'category', 'available', )
-    success_url = '/me/store/products/'
+    success_url = '/me/store/'
 
     def form_valid(self, form):
         images = self.request.FILES.getlist('images', None)
@@ -89,13 +75,9 @@ class UpdateProductView(LoginRequiredMixin, UpdateView):
             for video in removed_videos:
                 ProductVideo.objects.get(id=video).delete()
         return super().form_valid(form)
-    
-    @djdb_log
     @navbar_context
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Update product')
-        context['category'] = Category.objects.all()
         context['is_update'] = True
         context['images'] = ProductImage.objects.filter(product=self.object)
         context['videos'] = ProductVideo.objects.filter(product=self.object)
@@ -109,6 +91,102 @@ class RemoveProduct(LoginRequiredMixin, DeleteView):
         super().form_valid(form)
         return HttpResponse(status=204)
 
+class MyStoreView(LoginRequiredMixin, TemplateView):
+    template_name = 'my_store/store.html'
+    def get(self, request: http.HttpRequest, *args: Any, **kwargs: Any) -> http.HttpResponse:
+        if not hasattr(self.request.user, 'store'):
+            return redirect('/me/store/create/')
+        return super().get(request, *args, **kwargs)
+    
+    @navbar_context
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['store'] = self.request.user.store
+        context['products'] = Product.objects.filter(store=self.request.user.store) \
+                                .filter(name__icontains=self.request.GET.get('search', '')) \
+                                .order_by(self.request.GET.get('sort_by', 'id'))
+
+        for query in self.request.GET:
+            context['query_' + query] = self.request.GET.get(query, '')
+            print(context['query_' + query])
+        context['pending_count'] = Order.objects.filter(store=self.request.user.store, status='Pending').count()
+        rating = pd.read_csv('I:\project\scripts/1665_ds.204_Comment.csv', index_col=0) 
+        X_train = rating
+
+        df = pd.pivot_table(
+            X_train,
+            index= 'product_id', 
+            columns = 'user_id', 
+            values = "rate").fillna(0)
+
+            # Get rating function
+        def get_rating_(productid, userid):
+            return (X_train.loc[(X_train.user_id==userid) & (X_train.product_id==productid), 'rate'].iloc[0])
+
+        get_rating_(1, 9)
+
+        from numpy import sqrt
+        # Calculate Pearson Correlation score
+        def pearson_correlation_score(product1, product2):
+            # user list which ratings both product1 and product2
+            both_watch_count = []
+            for element in X_train.loc[X_train.product_id == product1, 'user_id'].to_list():
+                if element in X_train.loc[X_train.product_id == product2, 'user_id'].to_list():
+                    both_watch_count.append(element)
+            if len(both_watch_count) == 0:
+                return 0
+            rating_sum_1 = sum([get_rating_(product1, element) for element in both_watch_count])
+            avg_rating_sum_1 = rating_sum_1/len(both_watch_count)
+            rating_sum_2 = sum([get_rating_(product2, element) for element in both_watch_count])
+            avg_rating_sum_2 = rating_sum_2/len(both_watch_count)
+            numerator = sum([(get_rating_(product1, element) - avg_rating_sum_1) * (get_rating_(product2, element) - avg_rating_sum_2) for element in both_watch_count])
+            denominator = sqrt(sum([pow((get_rating_(product1, element) - avg_rating_sum_1), 2) for element in both_watch_count])) * sqrt(sum([pow((get_rating_(product2, element) - avg_rating_sum_2), 2) for element in both_watch_count]))
+            if (denominator == 0):
+                return 0
+            return numerator/denominator
+
+        def similar_product_pearson_(product1, numproduct):
+            productids = df.index.unique().tolist()
+            similarity_score = [(pearson_correlation_score(product1, productID), productID)  for productID in productids if productID != product1]
+            similarity_score.sort()
+            similarity_score.reverse()
+            return similarity_score[:numproduct]
+
+        def get_userids_(productid):
+            return X_train.loc[X_train.product_id == productid, 'user_id'].to_list()
+
+        # Function to recommend users for product
+        def recommend_user_pearson_(productid):
+            total = {}
+            similarity_sum = {}
+            for pearson, product in similar_product_pearson_(productid,10): #k=10
+                score = pearson
+                for userid in get_userids_(product):
+                    if userid not in get_userids_(productid) or get_rating_(productid, userid)==0:
+                        if userid not in total:
+                            total[userid] = 0
+                            similarity_sum[userid] = 0
+                            total[userid] += get_rating_(product,  userid)*score # tổng hợp đánh giá có trọng số - tử số
+                            similarity_sum[userid] += abs(score) # tổng hợp đánh giá có trọng số - mẫu số
+            ranking = [(to/similarity_sum[userid], userid) for userid, to in total.items()]
+            ranking.sort()
+            ranking.reverse()
+            recommend = [(userid, score) for score, userid in ranking] 
+            recommend = [check for check in recommend if not any(isinstance(n, float) and math.isnan(n) for n in check)]
+            return recommend
+
+        # product = Product.objects.get(id=self.kwargs['pk'])
+        # product_input = product.id
+        result = recommend_user_pearson_(18)
+        item_based_list = [i[0] for i in result if i[1] >= 4]
+        item_based_list = item_based_list[0:10]
+
+        my_filter_item_based = Q()
+        for item_based in item_based_list:
+            my_filter_item_based = my_filter_item_based | Q(id=item_based)
+        context['user_based_CF'] = Profile.objects.filter(gender='Female')[:50]   
+        return context
+    
 class CreateStoreView(LoginRequiredMixin, CreateView):
     form_class = StoreForm
     template_name = 'my_store/create_store.html'
@@ -117,65 +195,181 @@ class CreateStoreView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
-    
-    @djdb_log
-    @navbar_context
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['title'] = _('Create Store')
-        return context
 
 class EditStoreView(LoginRequiredMixin, UpdateView):
     form_class = StoreForm
     template_name = 'my_store/edit_store.html'
     success_url = '/me/store/'
 
-    def dispatch(self, request: http.HttpRequest, *args: Any, **kwargs: Any):
-        store = Store.objects.get(id=self.kwargs['pk'])
-        if store.owner != self.request.user:
-            return HttpResponseRedirect('/me/store/')
-        return super().dispatch(request, *args, **kwargs)
-
     def get_queryset(self):
         return Store.objects.filter(owner=self.request.user)
+
+class StoreStatisticsView(LoginRequiredMixin, TemplateView):
+    template_name = 'my_store/store_statistics.html'
+
+    def get(self, request: http.HttpRequest, *args: Any, **kwargs: Any) -> http.HttpResponse:
+        self.selected_time = request.GET.get('time', 'year')
+        now = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        if self.selected_time == 'year':
+            self.time = now.replace(day=1, month=1)
+        if self.selected_time == 'month':
+            self.time = now.replace(day=1)
+        if self.selected_time == 'week':
+            self.time = now - timedelta(days=now.isocalendar()[2] - 1)
+        if self.selected_time == 'day':
+            self.time = now
+        return super().get(request, *args, **kwargs)
     
-    @djdb_log
     @navbar_context
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Edit Store')
-        return context
+        context['store'] = self.request.user.store
+        context['products_sell_most'] = OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = self.time, order__status = 'Accepted') \
+                                        .values('product__name') \
+                                        .annotate(Sum('quantity')) \
+                                        .order_by('-quantity__sum')[:5]
 
-class HandleOrderView(LoginRequiredMixin, TemplateView):
-    template_name = 'history_detail.html'
+        context['products_total_sold'] = (OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = self.time, order__status = 'Accepted') \
+                                        .aggregate(total_sold = Sum('quantity'))['total_sold'] or 0) - \
+                                        (context['products_sell_most'] \
+                                        .aggregate(total_sold = Sum('quantity__sum'))['total_sold'] or 0)
+        
+        context['products_highest_rates'] = Comment.objects.filter(product__store=self.request.user.store, created_at__gte = self.time) \
+                                            .values('product__name') \
+                                            .annotate(avg_rate=Avg('rate')) \
+                                            .order_by('-avg_rate')[:5]
+        
+        accepted_count = Order.objects.filter(store=self.request.user.store, status='Accepted').count()
+        rejected_count = Order.objects.filter(store=self.request.user.store, status='Rejected').count()
+        if accepted_count + rejected_count != 0:
+            context['accepted_rates'] = accepted_count / (accepted_count + rejected_count) * 100
+        else:
+            context['accepted_rates'] = 0
+        
+        current_date = timezone.now()
+        context['orders_in_week'] = Order.objects.filter(store=self.request.user.store, status='Accepted', created_at__gte=current_date - timezone.timedelta(days=7)) \
+                                            .count()
+        context['orders_in_month'] = Order.objects.filter(store=self.request.user.store, status='Accepted', created_at__gte=current_date - timezone.timedelta(days=30)) \
+                                            .count()
+        monthly_income = 0
+        for order in Order.objects.filter(store=self.request.user.store, status='Accepted', created_at__gte=current_date - timezone.timedelta(days=30)):
+            monthly_income += order.cost
+        context['monthly_income'] = monthly_income
+        context['time_range'] = [
+            {
+                'text': _('day'),
+                'value': 'day',
+            },
+            {
+                'text': _('week'),
+                'value': 'week',
+            },
+            {
+                'text': _('month'),
+                'value': 'month',
+            },
+            {
+                'text': _('year'),
+                'value': 'year',
+            }]
+        context['selected_range'] = self.selected_time
 
-    def dispatch(self, request, *args: Any, **kwargs: Any):
-        order = Order.objects.get(id=kwargs['pk'])
-        if order.user != request.user and order.store.owner != request.user:
-            return HttpResponseRedirect('/')
-        return super().dispatch(request, *args, **kwargs)
-    
-    @djdb_log
-    @navbar_context
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['title'] = _('Pending Order')
-        context['order'] = Order.objects.get(id=kwargs['pk'])
-        context['handle'] = True
+        spot_length = 10
+        context['products_sold_by_range'] = []
+        for i in range(spot_length - 1, -1, -1):
+            if self.selected_time == 'day':
+                products_sold_by_range = OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = self.time - timedelta(days=i), \
+                                                order__created_at__lt = self.time - timedelta(days=i - 1), order__status = 'Accepted') \
+                                        .values('product__name') \
+                                        .annotate(total_sold = Sum('quantity'))
+                item = {
+                    'time': (self.time - timedelta(days=i)).strftime('%d/%m/%Y'),
+                    'products': [
+                        {
+                            'name': product['product__name'],
+                            'total_sold': product['total_sold']
+                        } for product in products_sold_by_range
+                    ]
+                }
+                context['products_sold_by_range'].append(item)
+            if self.selected_time == 'week':
+                products_sold_by_range = OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = self.time - timedelta(days=i*7), \
+                                                order__created_at__lt = self.time - timedelta(days=(i-1)*7), order__status = 'Accepted') \
+                                        .values('product__name') \
+                                        .annotate(total_sold = Sum('quantity'))
+                item = {
+                    'time': (self.time - timedelta(days=i*7)).strftime('%d/%m/%Y'),
+                    'products': [
+                        {
+                            'name': product['product__name'],
+                            'total_sold': product['total_sold']
+                        } for product in products_sold_by_range
+                    ]
+                }
+                context['products_sold_by_range'].append(item)
+            if self.selected_time == 'month':
+                def past_month(date, k):
+                    if k < 0:
+                        return timezone.now()
+                    for _ in range(k):
+                        date = (date - timedelta(days=1)).replace(day=1)
+                    return date
+
+                products_sold_by_range = OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = past_month(self.time, i), \
+                                                order__created_at__lt = past_month(self.time, i - 1), order__status = 'Accepted') \
+                                        .values('product__name') \
+                                        .annotate(total_sold = Sum('quantity'))
+                item = {
+                    'time': past_month(self.time, i).strftime('%m/%Y'),
+                    'products': [
+                        {
+                            'name': product['product__name'],
+                            'total_sold': product['total_sold']
+                        } for product in products_sold_by_range
+                    ]
+                }
+                context['products_sold_by_range'].append(item)
+            if self.selected_time == 'year':
+                def past_year(date, k):
+                    if k < 0:
+                        return timezone.now()
+                    for _ in range(k):
+                        date = (date - timedelta(days=1)).replace(day=1, month=1)
+                    return date
+                products_sold_by_range = OrderDetail.objects.select_related('order') \
+                                        .filter(product__store=self.request.user.store, order__created_at__gte = past_year(self.time, i), \
+                                                order__created_at__lt = past_year(self.time, i - 1), order__status = 'Accepted') \
+                                        .values('product__name') \
+                                        .annotate(total_sold = Sum('quantity'))
+                item = {
+                    'time': past_year(self.time, i).strftime('%Y'),
+                    'products': [
+                        {
+                            'name': product['product__name'],
+                            'total_sold': product['total_sold']
+                        } for product in products_sold_by_range
+                    ]
+                }
+                context['products_sold_by_range'].append(item)
+
+
+        import json
+        from django.core.serializers.json import DjangoJSONEncoder
+        context['products_sold_by_range'] = json.dumps(context['products_sold_by_range'], cls=DjangoJSONEncoder)
         return context
 
 class PendingOrderView(LoginRequiredMixin, ListView):
-    template_name = 'store_dashboard/pending_orders.html'
+    template_name = 'my_store/pending_orders.html'
     model = Order
     paginate_by = 10
 
     def get_queryset(self):
-        search_content = self.request.GET.get('search', '')
-        return (Order.objects.filter(store=self.request.user.store, status='Pending', id__icontains=search_content) | \
-                Order.objects.filter(store=self.request.user.store, status='Pending', user__username__icontains=search_content)).distinct() \
-                .prefetch_related('orderdetail_set') \
-                .select_related('user') \
-                .order_by('-created_at')
+        return Order.objects.filter(store=self.request.user.store, status='Pending').order_by('-created_at')
 
     def post(self, request, **kwargs):
         data = request.POST
@@ -183,48 +377,35 @@ class PendingOrderView(LoginRequiredMixin, ListView):
         result = data.get('result', None)
         if order_id and result:
             order = Order.objects.get(id=order_id)
-            if order.status != 'Pending':
-                return HttpResponseForbidden()
             if result == 'Accepted':
-                create_notification(user=order.user, actor=order.store.name, action='Accept', target=order.id)
+                for order_detail in order.orderdetail_set.all():
+                    create_notification(order.user, 'Order Accepted', f'Your order (#{order.id}) has been accepted.')
             elif result == 'Rejected':
                 for order_detail in order.orderdetail_set.all():
                     product = order_detail.product
                     product.quantity += order_detail.quantity
                     product.save()
-                create_notification(user=order.user, actor=order.store.name, action='Reject', target=order.id)
+                    create_notification(order.user, 'Order Rejected', f'Your order (#{order.id}) has been rejected.')
             order.status = result
             order.created_at = timezone.now()
             order.save()
         else:
             return HttpResponse(status=400)
-        try:
-            obj = {
-                'next': reverse('handle_order', kwargs={'pk': Order.objects.get(store=self.request.user.store, status='Pending').id}),
-            }
-        except Order.DoesNotExist:
-            obj = {
-                'next': reverse('pending_order'),
-            }
-        return JsonResponse(obj)
+        return HttpResponse(status=204)
 
-    @djdb_log
     @navbar_context
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Pending Orders')
-        context['sname'] = 'pending'
         context['count'] = Order.objects.filter(store=self.request.user.store, status='Pending').count()
         return context
 
 class ProductSaleView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         product = Product.objects.get(id=kwargs['pk'])
-        try:
-            sale = ProductSale.objects.get(product=product, expired_at__gte = timezone.now())
-            return JsonResponse({'type': sale.sale_type, 'value': sale.value})
-        except:
+        sale = ProductSale.objects.filter(product=product, expired_at__gte = timezone.now()).order_by('-created_at')
+        if sale.count() == 0:
             return HttpResponseNotFound()
+        return JsonResponse({'type': sale[0].sale_type, 'value': sale[0].value})
     
     def delete(self, request, **kwargs):
         product = Product.objects.get(id=kwargs['pk'])

@@ -12,7 +12,7 @@ from typing import *
 from .utils import djdb_log, navbar_context
 from . import utils
 class LoginView(auth_views.LoginView):
-    next = '/'
+    next_page = '/'
 
     @navbar_context
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

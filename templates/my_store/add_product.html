@@ -1,18 +1,11 @@
-{% extends 'store_dashboard.html' %}
+{% extends 'base/base_nav.html' %}
 {% load i18n %}
 {% load static %}
-{% block dashboard_item %}
-<div class="container m-5">
-    <div class="text-uppercase text-center my-5 fs-2 fw-bold">
-        {% if is_update %}
-            {% trans 'Update product' %}
-        {% else %}
-            {% trans 'Add product' %}
-        {% endif %}
-    </div>
+{% block content %}
+<div class="container" style="padding: 5%;">
     <form enctype="multipart/form-data" method="post">{% csrf_token %}
         <div class="mb-3">
-            <label for="{{form.name.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.name.label}}</label>
+            <label for="{{form.name.id_for_label}}" class="form-label">{{form.name.label}}</label>
             <input type="text" name="{{form.name.html_name}}" id="{{form.name.html_name}}" class="form-control" value="{{form.name.value|default:''}}">
             <div class="form-text">
                 {{form.name.errors}}
@@ -24,7 +17,7 @@
             {% endif %}
         </div>
         <div class="mb-3">
-            <label for="{{form.description.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.description.label}}</label>
+            <label for="{{form.description.id_for_label}}" class="form-label">{{form.description.label}}</label>
             <textarea name="{{form.description.html_name}}" id="{{form.description.html_name}}" class="form-control">{{form.description.value|default:''}}</textarea>
             <div class="form-text">
                 {{form.description.errors}}
@@ -36,40 +29,44 @@
             {% endif %}
         </div>
         <div class="mb-3">
-            <label for="{{form.thumbnail.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.thumbnail.label}}</label>
+            <label for="{{form.thumbnail.id_for_label}}" class="form-label">{{form.thumbnail.label}}</label>
             {% if form.thumbnail.value %}
             <div class="row">
                 <div class="d-flex justify-content-center my-2">
-                    <img src="{{form.thumbnail.value.url}}" height="200px">
+                    <img src="{{form.thumbnail.value}}" height="200px">
                 </div>
             </div>
             {% endif %}
-            <input type="file" name="{{form.thumbnail.html_name}}" accept="image/*" id="{{form.thumbnail.id_for_label}}" class="image-size-validate form-control">
+            <input type="file" name="{{form.thumbnail.html_name}}" accept="image/*" id="{{form.thumbnail.id_for_label}}" class="form-control">
             <div class="form-text">
                 {{form.thumbnail.errors}}
             </div>
+            <div class="form-text text-danger">
+                {% trans 'Image size must not be greater than 10MB' %}
+            </div>
             {% if form.thumbnail.help_text %}
                 <div class="form-text">
+                    {% trans 'Image size must not be greater than 10MB' %}
                     {{form.thumbnail.help_text}}
                 </div>
             {% endif %}
         </div>
         <div class="mb-3">
-            <label class="form-label fw-bold text-uppercase">{% trans 'Images' %}</label>
+            <label class="form-label">{% trans 'Images' %}</label>
             <div class="row mb-2" id="image-container">
                 {% for item in images %}
                     <div class="col-md-auto m-1" data-image-id="{{item.id}}">
-                        <img src="{{item.image.url}}" class="img-thumbnail product-image" role="button" data-id="{{item.id}}" style="height: 100px !important;">
+                        <img src="{{item.image}}" class="img-thumbnail product-image" role="button" data-id="{{item.id}}" style="height: 100px !important;">
                     </div>
                 {% endfor %}
             </div>
-            <div class="form-text my-1">
+            <div class="form-text">
                 {% trans 'Click image to remove from product' %}
             </div>
-            <input type="file" name="images" accept="image/*" class="image-size-validate form-control" multiple>
+            <input type="file" name="images" accept="image/*" class="form-control" multiple>
         </div>
         <div class="mb-3">
-            <label class="form-label fw-bold text-uppercase">{% trans 'Videos' %}</label>
+            <label class="form-label">{% trans 'Videos' %}</label>
             <div class="row mb-2" id="video-container">
                 {% for item in videos %}
                     <div class="row mb-3" data-video-id="{{item.id}}">
@@ -94,13 +91,13 @@
                     </div>
                 {% endfor %}
             </div>
-            <input type="file" name="videos" accept="video/mp4" class="image-size-validate form-control" multiple>
+            <input type="file" name="videos" accept="video/mp4" class="form-control" multiple>
         </div>
         <div class="mb-3">
-            <label for="{{form.price.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.price.label}}</label>
+            <label for="{{form.price.id_for_label}}" class="form-label">{{form.price.label}}</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input type="number" name="{{form.price.html_name}}" id="{{form.price.html_name}}" class="form-control" value="{{form.price.value|default:'0'}}">    
+                <input type="number" name="{{form.price.html_name}}" id="{{form.price.html_name}}" class="form-control" value="{{form.price.value|default:''}}">    
             </div>
             <div class="form-text">
                 {{form.price.errors}}
@@ -112,8 +109,8 @@
             {% endif %}
         </div>
         <div class="mb-3">
-            <label for="{{form.quantity.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.quantity.label}}</label>
-            <input type="text" name="{{form.quantity.html_name}}" id="{{form.quantity.html_name}}" class="form-control" value="{{form.quantity.value|default:'0'}}">
+            <label for="{{form.quantity.id_for_label}}" class="form-label">{{form.quantity.label}}</label>
+            <input type="text" name="{{form.quantity.html_name}}" id="{{form.quantity.html_name}}" class="form-control" value="{{form.quantity.value|default:''}}">
             <div class="form-text">
                 {{form.quantity.errors}}
             </div>
@@ -124,10 +121,10 @@
             {% endif %}
         </div>
         <div class="mb-3">
-            <label for="{{form.category.id_for_label}}" class="form-label fw-bold text-uppercase">{{form.category.label}}</label>
+            <label for="{{form.category.id_for_label}}" class="form-label">{{form.category.label}}</label>
             <select type="text" name="{{form.category.html_name}}" id="{{form.category.html_name}}" class="form-control" value="{{form.category.value|default:''}}">
-                {% for option in category %}
-                    <option value="{{option.id}}" {% if option.id == form.category.value %} selected {% endif %}>{% trans option.name %}</option>
+                {% for option in form.category %}
+                    {{option}}
                 {% endfor %}
             </select>
             <div class="form-text">
@@ -147,11 +144,11 @@
         </div>
         <div class="d-flex justify-content-center">
             {% if is_update %}
-                <button type="submit" class="btn btn-primary mx-1">{% trans 'Save' %}</button>
+                <button type="submit" class="btn btn-primary mx-1">{% trans 'Update' %}</button>
             {% else %}
                 <button type="submit" class="btn btn-info mx-1">{% trans 'Create' %}</button>
             {% endif %}
-            <a name="" id="" class="btn btn-danger mx-1" href="{% url 'dashboard_products' %}" role="button">{% trans 'Cancel' %}</a>
+            <a name="" id="" class="btn btn-danger mx-1" href="/me/store/" role="button">{% trans 'Cancel' %}</a>
         </div>
     </form>
     <script type="module" src="{% static 'js/product-update.js' %}"></script>

@@ -1,5 +1,5 @@
-id,password,last_login,is_superuser,username,first_name,last_name,email,is_staff,is_active,date_joined
-0,cpvecltt.097,,False,user01,Tu,Huong,user01@gmail.com,False,True,
+id,password,last_login,is_superuser,username,firstname,lastname,email,is_staff,is_active,date_joined
+0,cpvecltt.097,,True,user01,Tu,Huong,user01@gmail.com,True,True,
 1,cpvecltt.097,,False,user02,Dang,Phi,user02@gmail.com,False,True,
 2,cpvecltt.097,,False,user03,Tran,Nhat,user03@gmail.com,False,True,
 3,cpvecltt.097,,False,user04,Nguyen,Hoang,user04@gmail.com,False,True,

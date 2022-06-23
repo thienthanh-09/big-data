@@ -3,11 +3,12 @@ import csv
 import re
 import pandas
 import os
-from store.models import Product, ProductImage, Comment
+from pytz import timezone
+from store.models import Product, ProductImage, Comment, Category, Store, Profile
 from django.contrib.auth.models import User
 
 # def run():
-#     file = open('scripts\89_ds204_Product.csv')
+#     file = open('scripts\89_ds.204_Product.csv')
 #     read_file=csv.reader(file)
 
 #     Product.objects.all().delete()
@@ -23,7 +24,7 @@ from django.contrib.auth.models import User
 #         count=count+1
 
 # def run():
-#     file = open('scripts\99_ds204_ProductImage.csv')
+#     file = open('scripts/100_ds.204_ProductImage.csv')
 #     read_file=csv.reader(file)
 
 #     ProductImage.objects.all().delete()
@@ -39,7 +40,7 @@ from django.contrib.auth.models import User
 #         count=count+1
 
 # def run():
-#     file = open('scripts/423_ds204_user.csv')
+#     file = open('scripts/424_ds.204_user.csv')
 #     read_file=csv.reader(file)
 
 #     User.objects.all().delete()
@@ -55,7 +56,7 @@ from django.contrib.auth.models import User
 #         count=count+1
 
 def run():
-    file = open('scripts/1664_ds204_Comment.csv')
+    file = open('scripts/1665_ds.204_Comment.csv', encoding="utf8")
     read_file=csv.reader(file)
 
     Comment.objects.all().delete()
@@ -69,3 +70,51 @@ def run():
             print(record)
             Comment.objects.create(id=record[0], content=record[1], rate=record[2], product_id=record[4], user_id=record[5])
         count=count+1
+
+# def run():
+#     file = open('scripts/424_ds.204_Profile.csv', encoding="utf8")
+#     read_file=csv.reader(file)
+
+#     Profile.objects.all().delete()
+
+#     count=1
+
+#     for record in read_file:
+#         if count==1:
+#             pass
+#         else:
+#             print(record)
+#             Profile.objects.create(id=record[0], name=record[1], gender=record[3], phone=record[4], address=record[5], avatar=record[6], timezone=record[7], user_id=record[8])
+#         count=count+1
+
+# def run():
+#     file = open('scripts/21_ds.204_Category.csv')
+#     read_file=csv.reader(file)
+
+#     Category.objects.all().delete()
+
+#     count=1
+
+#     for record in read_file:
+#         if count==1:
+#             pass
+#         else:
+#             print(record)
+#             Category.objects.create(id=record[0], name=record[1])
+#         count=count+1
+
+# def run():
+#     file = open('scripts/11_ds.204_Store.csv', encoding="utf8")
+#     read_file=csv.reader(file)
+
+#     Store.objects.all().delete()
+
+#     count=1
+
+#     for record in read_file:
+#         if count==1:
+#             pass
+#         else:
+#             print(record)
+#             Store.objects.create(id=record[0], name=record[1], description=record[2], phone=record[3], address=record[4], slug=record[5], owner_id=record[6])
+#         count=count+1

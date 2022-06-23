@@ -31,20 +31,27 @@
 </div>
 <div class="container">
     <div class="my-5 pt-3 border-top">
-        {% trans 'Most-viewed items' as title1 %}
+        {% if not user.is_authenticated %}
+            {% trans 'Popularity recomendation' as title1 %}
+        {% else %}
+            {% trans 'Recommend products pearson' as title1 %}
+        {% endif %}
+        {% include 'components/products_set.html' with id="trend" title=title1 des=des1 products_set=recommended_products %}
+    </div>
+
+
+
+    {% comment %} <div class="my-5 pt-3 border-top">
+        {% trans 'Most viewers' as title1 %}
         {% include 'components/products_set.html' with id="view" title=title1 des=des1 products_set=most_viewed_products %}
-    </div>
-    
-    <div class="my-5 pt-3 border-top">
-        {% trans 'Trending products' as title1 %}
-        {% include 'components/products_set.html' with id="trend" title=title1 des=des1 products_set=trending_products %}
-    </div>
+    </div> {% endcomment %}
     
     {% comment %} <div class="my-5 pt-3 border-top">
         {% trans 'Best seller' as title1 %}
         {% trans 'Top products of this week' as des1 %}
         {% include 'components/products_set.html' with id="sell" title=title1 des=des1 products_set=recommended_products %}    
     </div>     {% endcomment %}
+    
 </div>
 {% include 'components/quick_modal.html' %}
 <script type="module" src="{% static 'js/product-card.js' %}"></script>

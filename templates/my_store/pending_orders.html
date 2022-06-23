@@ -1,0 +1,64 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+<div class="container">
+    <h4 class="m-3 text-center">{% trans 'Pending Orders' %} ({{count}})</h4>
+    {% for order in object_list %}
+    <table class="table table-hover caption-top my-5">
+        <caption>
+            <div class="row">
+                <span>{% trans 'Customer' %}: <b>{{order.user.username}}</b> ({{order.created_at}})</span>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                <span>{% trans 'Tel' %}: <b>{{order.user.profile.phone}}</b></span>
+                </div>
+                <div class="col-auto">
+                <span>{% trans 'Address' %}: <b>{{order.user.profile.address}}</b></span>
+                </div>
+            </div>
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% trans 'Product' %}</th>
+                <th scope="col">{% trans 'Quantity' %}</th>
+                <th scope="col">{% trans 'Price' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.orderdetail_set.all %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{item.product.name}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.cost}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <footer>
+            <tr>
+                <td colspan="3" style="text-align: center;">{% trans 'Cost' %}</td>
+                <td>{{order.cost}}</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary mx-1 accept-btn" order-id="{{order.id}}">
+                            {% trans 'Accept' %}
+                        </button>
+                        <button type="button" class="btn btn-danger mx-1 reject-btn" order-id="{{order.id}}">
+                            {% trans 'Reject' %}
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </footer>
+    </table>
+    {% endfor %}
+    {% include 'base/pagination.html' %}
+</div>
+<script type="module" src="{% static 'js/store-orders.js' %}"></script>
+{% endblock %}

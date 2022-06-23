@@ -1,26 +1,15 @@
 from django.views.generic import ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.translation import gettext_lazy as _
 from typing import *
 
-from store.views.utils import djdb_log, navbar_context
+from store.views.utils import navbar_context
 from django.utils.timezone import now
-from ..models import Notification, Product
+from ..models import Notification
 from django.contrib.auth.models import User
 from django.http import *
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 
-def create_notification(**kwargs) -> Notification:
-    channel_layer = get_channel_layer()
-    room_name = str(kwargs['user'].id)
-    async_to_sync(channel_layer.group_send)(room_name, {
-        'type': 'receive',
-        'data': {
-            'type': 'notification',
-        },
-    })
-    return Notification.objects.create(**kwargs)
+def create_notification(user: User, title: str, content: str) -> Notification:
+    return Notification.objects.create(user=user, title=title, content=content)
 
 def read_notification(notification: Notification) -> None:
     notification.status = 'Read'
@@ -42,11 +31,9 @@ class NotificationListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(status='Unread')
         return queryset
 
-    @djdb_log
     @navbar_context
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Notifications')
         context['hide_read'] = self.request.GET.get('hide_read', None) == 'true'
         return context
 

@@ -1,0 +1,208 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/products_page.css' %}">
+<link rel="stylesheet" href="{% static 'css/product_card.css' %}">
+{% block content %}
+<div class="container">
+    <h4 class="m-3 text-center">{% trans 'My Store' %}</h4>
+    <div class="row mb-3">
+        <div class="container">
+            <div class="mb-3">
+                <label class="form-label">{% trans 'Name' %}</label>
+                <input class="form-control" value="{{store.name}}" disabled>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{% trans 'Description' %}</label>
+                <textarea class="form-control" disabled>{{store.description}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{% trans 'Phone' %}</label>
+                <input class="form-control" value="{{store.phone}}" disabled>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{% trans 'Address' %}</label>
+                <input class="form-control" value="{{store.address}}" disabled>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a name="" id="" class="btn btn-primary" href="edit/{{store.id}}/" role="button">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    {% trans 'Edit' %}
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <b>{% trans 'My products' %}</b>
+        <div class="row">
+            <div class="col-lg-6 my-1">
+                <div class="input-group">
+                    <input type="search" class="form-control" id="search-input" value="{{query_search}}">
+                    <button type="button" class="btn btn-outline-primary" id="search-btn">{% trans 'Search' %}</button>
+                </div>
+            </div>
+            <div class="col-lg-6 my-1">
+                <div class="d-flex justify-content-end">
+                    <div class="btn-group">
+                        <a name="" id="" class="btn btn-success" href="orders/" role="button">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            {% trans 'Pending Orders' %} ({{pending_count}})
+                        </a>
+                        <a name="" id="" class="btn btn-warning" href="statistics/" role="button">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            {% trans 'Statistics' %}
+                        </a>
+                        <a name="" id="" class="btn btn-primary" href="product/add/" role="button">
+                            <i class="fa-solid fa-plus"></i>
+                            {% trans 'Add Product' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive-lg">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Name' %}</th>
+                    <th scope="col" class="sort-attr text-end" field="price" role="button">
+                        {% trans 'Price' %}
+                        {% if query_sort_by == '-price' %}
+                        <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        {% endif %}
+                        {% if query_sort_by == 'price' %}
+                        <i class="fa-solid fa-arrow-up-wide-short"></i>
+                        {% endif %}
+                    </th>
+                    <th scope="col" class="sort-attr text-end" field="quantity" role="button">
+                        {% trans 'Quantity' %}
+                        {% if query_sort_by == '-quantity' %}
+                        <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        {% endif %}
+                        {% if query_sort_by == 'quantity' %}
+                        <i class="fa-solid fa-arrow-up-wide-short"></i>
+                        {% endif %}
+                    </th>
+                    <th scope="col" class="text-center">{% trans 'Product type' %}</th>
+                    <th scope="col" class="text-center">{% trans 'Actions' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr class="align-middle {% if not product.available %} table-secondary {% elif product.quantity == 0 %} table-danger {% endif %}">
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>
+                        <a href="{{product.get_absolute_url}}" class="text-decoration-none text-dark">{{product.id}} - {{product.name}}</a>
+                    </td>
+                    <td class="text-end">
+                        {% if product.productsale_set.all.first.valid %}
+                        <span class="text-decoration-line-through text-danger">{{product.price}}</span>
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        <span class="text-success" id="new-price">{{product.productsale_set.all.first.price}}</span>
+                        {% else %}
+                            {{product.price}}
+                        {% endif %} USD
+                    </td>
+                    <td class="text-end">{{product.quantity}}</td>
+                    <td class="text-center">{% trans product.category.name %}</td>
+                    <td>
+                        <div class="d-flex justify-content-around">
+                            <div class="btn-group">
+                                <a class="btn btn-warning sales-btn" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" item-id="{{product.id}}" item-name="{{product.name}}" item-price="{{product.price}}">
+                                    <i class="fa-solid fa-percent"></i>
+                                </a>
+                                <a name="" id="" class="btn btn-primary" href="./product/update/{{product.id}}/" role="button">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger" product-id="{{product.id}}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>  
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <div class="mx-5 my-2 p-5">
+                        <div class="container">
+                            <div class="mb-5">
+                                {% trans 'User-based CF pearson' as title1 %}
+                                {% include 'components/users_set.html' with id="trend" title=title1 des=des1 products_set=user_based_CF %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{% trans 'Product Sale Off' %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-1 pt-2">
+                    <div class="col-md-3">
+                        {% trans 'Type' %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-check">
+                            <input class="form-check-input sale-choice" type="checkbox" value="P">
+                            <label class="form-check-label">{% trans 'Percentage' %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input sale-choice" type="checkbox" value="F">
+                            <label class="form-check-label">{% trans 'Fixed' %}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1 pt-2">
+                    <div class="col-md-3">
+                        {% trans 'Value' %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <span class="input-group-text" id="sale-value-symbol">%</span>
+                            <input type="number" class="form-control" id="sale-value" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1 pt-2">
+                    <div class="col-md-3">
+                        {% trans 'Duration' %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="sale-duration" min="0">
+                            <span class="input-group-text">{% trans 'day(s)' %}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-1 pt-2 fw-bold text-center" id="modal-product-name">
+
+                </div>
+                <div class="m-1 pt-2 text-center" id="modal-product-price">
+                    <span class="text-decoration-line-through text-danger" id="original-price"></span>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    <span class="text-success" id="sale-price"></span>
+                </div>
+            </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Close' %}</button>
+                <button type="button" class="btn btn-danger" id="sale-remove-btn">{% trans 'Remove' %}</button>
+                <button type="button" class="btn btn-primary" id="sale-confirm-btn">{% trans 'Confirm' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="{% static './js/store.js' %}"></script>
+{% endblock %}

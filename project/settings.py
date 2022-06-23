@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'emoji',
     'django_extensions',
+    'django_pdb',
 ]
 
 SITE_ID = 2
@@ -116,7 +117,7 @@ INTERNAL_IPS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ds204',
+        'NAME': 'ds.204',
         'USER': 'postgres',
         'PASSWORD': '0308',
         'HOST': 'localhost',

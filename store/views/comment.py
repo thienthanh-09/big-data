@@ -16,5 +16,5 @@ class CommentView(CreateView):
         form.instance.product.rating = rate
         form.instance.product.rating_count += 1
         form.instance.product.save()
-        create_notification(user=form.instance.product.store.owner, actor=self.request.user.username, action='Comment', target=form.instance.product.id)
+        create_notification(form.instance.product.store.owner, '(Store) New comment on your product', self.request.user.username + ' commented on your product ' + form.instance.product.name)
         return super().form_valid(form)

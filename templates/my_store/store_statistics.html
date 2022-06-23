@@ -1,0 +1,199 @@
+{% extends 'base/base_nav.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h4 class="text-center py-3">{% trans 'Store Statistics' %}</h4>
+    <div class="row">
+        <div class="col-md-6">
+            {% trans 'Accepted rates' %}: 
+            <span class="text-success fw-bold">
+                {{accepted_rates|floatformat:'1'}}%
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {% trans '7-days orders' %}: 
+            <span class="fw-bold">{{orders_in_week}}</span>
+        </div>
+        <div class="col-md-6">
+            {% trans '30-days orders' %}:
+            <span class="fw-bold">{{orders_in_month}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            {% trans '30-days income' %}: 
+            <span class="fw-bold">{{monthly_income}} USD</span>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">      
+            {% for range in time_range %}
+            <input type="radio" class="btn-check by-btn" data-time="{{range.value}}" name="btnradio" id="by-{{range.value}}" autocomplete="off" {% if selected_range == range.value %} checked {% endif %}>
+            <label class="btn btn-outline-primary" for="by-{{range.value}}">{{range.text}}</label>
+            {% endfor %}
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-warning" id="mode-chart-btn">
+                <i class="fas fa-chart-pie"></i>
+                {% trans 'Graph' %}
+            </button>
+            <button type="button" class="btn btn-primary" id="mode-table-btn">
+                <i class="fa fa-table" aria-hidden="true"></i>
+                {% trans 'Table' %}
+            </button>
+        </div>
+    </div>
+    <div id="mode-table-content" class="my-2">
+        <script>
+            window.productsSellMost = '{{products_sell_most}}';
+            window.productsHighestRates = '{{products_highest_rates}}';
+        </script>
+        <table class="table caption-top my-2">
+            <caption>{% trans 'Sell Most' %}</caption>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Product' %}</th>
+                    <th scope="col" class="text-end">{% trans 'Sold' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in products_sell_most %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td class="product-name">{{item.product__name}}</td>
+                    <td class="text-end product-quantity">{{item.quantity__sum}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th scope="row"></th>
+                    <td class="product-name">{% trans 'Others' %}</td>
+                    <td class="text-end product-quantity">{{products_total_sold}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            <a name="" id="download-sell-btn" class="btn btn-outline-primary" href="#" role="button">
+                <i class="fas fa-file-download"></i>
+                {% trans 'Download CSV' %}
+            </a>
+        </div>
+
+        <table class="table caption-top my-2">
+            <caption>{% trans 'High Rates' %}</caption>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Product' %}</th>
+                    <th scope="col" class="text-end">{% trans 'Rates' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in products_highest_rates %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td class="rate-product-name">{{item.product__name}}</td>
+                    <td class="text-end"><span class="product-rate">{{item.avg_rate|floatformat:'1'}}</span>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            <a name="" id="download-rate-btn" class="btn btn-outline-primary" href="#" role="button">
+                <i class="fas fa-file-download"></i>
+                {% trans 'Download CSV' %}
+            </a>
+        </div>
+    </div>
+    <div id="mode-chart-content" class="my-2">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <canvas id="chart-most-sell"></canvas>      
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <canvas id="chart-sold-count"></canvas>
+                <script>
+                    let obj = JSON.parse("{{products_sold_by_range}}".replaceAll('&quot;', '"'));
+                    let labels = [];
+                    for (let i = 0; i < obj.length; i++) {
+                        labels.push(obj[i].time);
+                    }
+
+                    let product_values = {};
+                    for (let i = 0; i < obj.length; i++) {
+                        for (let j = 0; j < obj[i].products.length; j++) {
+                            let product = obj[i].products[j].name;
+                            if (product_values[product] == undefined) {
+                                product_values[product] = [];
+                                for (let k = 0; k < i; k++){
+                                    product_values[product].push(0);
+                                }
+                            }
+                            product_values[product].push(obj[i].products[j].total_sold);
+                        }
+                        for (let product_name in product_values){
+                            if (product_values[product_name].length < i + 1){
+                                product_values[product_name].push(0);
+                            }
+                        }
+                    }
+                    let datasets = [];
+                    for (let product in product_values) {
+                        let randomColor = function() {
+                            r = Math.floor(Math.random() * 255);
+                            g = Math.floor(Math.random() * 255);
+                            b = Math.floor(Math.random() * 255);
+                            return "rgb(" + r + "," + g + "," + b + ")";
+                        }
+
+                        let color = randomColor();
+
+                        let data = {
+                            label: product,
+                            data: product_values[product],
+                            backgroundColor: color,
+                            borderColor: color,
+                            borderWidth: 1,
+                        };
+                        datasets.push(data);
+                    }
+
+                    window.chart2Config = {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: datasets,
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Products sold count'
+                                }
+                            }
+                        },
+                    };
+                </script>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <button type="button" class="btn btn-outline-primary" id="download-pdf-btn">{% trans 'Save as PDF' %}</button>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js" integrity="sha512-Lii3WMtgA0C0qmmkdCpsG0Gjr6M0ajRyQRQSbTF6BsrVh/nhZdHpVZ76iMIPvQwz1eoXC3DmAg9K51qT5/dEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="module" src="{% static 'js/statistic.js' %}"></script>
+{% endblock %}

@@ -48,7 +48,7 @@
                 {% for item in order.order_details %}
                 <div item-id="{{item.id}}" class="row border-top py-4 justify-content-center">
                     <div class="col-md-2 row align-items-center">
-                        <img src="{{item.product.thumbnail.url}}" class="product-thumbnail">
+                        <img src="{{item.product.thumbnail}}" class="product-thumbnail">
                     </div>
                     <div class="col-md-5 text-wrap row align-items-center">
                         <a href="{{item.product.get_absolute_url}}" style="text-decoration: none; color: black">{{item.product.name}}</a>

@@ -112,9 +112,11 @@
                     </div>
                     <div class="col-md-8">
                         <div class="btn-group w-100" role="button">
-                            <button type="button" class="btn btn-primary fw-bold add-cart" item-id="{{object.id}}">
-                                <i class="fa-solid fa-cart-shopping text-warning"></i>
-                                {% trans 'Add to Cart' %}
+                            <button type="button" class="btn btn-primary col-auto" item-id="{{object.id}}" id="add-cart" {% if object.quantity == 0 %} disabled {% endif %}>
+                                <a style="text-decoration: none; color: white" href="#">
+                                    <i class="fa-solid fa-cart-shopping text-warning"></i>
+                                    {% trans 'Add to Cart' %}
+                                </a>
                             </button>    
                         </div>
                     </div>
@@ -122,8 +124,10 @@
                 <div class="row mb-3">
                     <div class="col-md-auto">
                         <span class="fw-bold {% if liked %}text-danger{% endif %}" role="button" id="like-product-btn" product-id="{{object.id}}">
+                            <a style="tex-decoration:none; " href="{% url store:like}"></a>
                             <i class="fa {% if liked %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
-                            <span id="fav_text">{% if liked %}{% trans 'Remove from Favorited products' %}{% else %}{% trans 'Add to Favorited products' %}{% endif %}</span>
+                            <span id="fav_text">{% if liked %}{% trans 'Remove from Favorited products' %}{% else %}{% trans 'Add to Favorited products' %}{% endif %}
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -269,7 +273,7 @@
 <div class="mx-5 my-2 p-5">
     <div class="container">
         <div class="mb-5">
-            {% trans 'Related products' as title1 %}
+            {% trans 'Recommend product based on description' as title1 %}
             {% include 'components/products_set.html' with id="related" title=title1 des=des1 products_set=related_products %}
         </div>
     </div>

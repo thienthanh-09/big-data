@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load humanize %}
+<div class="card border-light product-item" item-url="{{item.get_absolute_url}}" role="button">
+    <div class="product-thumbnail position-relative">
+        <img src="{{item.avt}}" class="card-img-top product-thumbnail" alt="" style="object-fit:contain">
+        <div class="position-absolute top-0 start-0">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row justify-content-start">
+            <div class="col-auto">
+                <img src="https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg" class="card-img-top product-thumbnail" alt="" style="object-fit:contain">
+            </div>
+        </div>
+        <div class="text-truncate text-primary product-name">
+            user{{item.id}}
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 add-btn">
+        <div class="col-auto">
+            <div class="btn-group" role="button">
+                <div class="jusify-content-center align-items-center bg-primary rounded-3">
+                    <button type="button" class="btn btn-primary col-auto add-to-cart-btn fw-bold text-truncate" product-id="{{item.id}}">
+                        <i class="fas fa-envelope-open-text"></i> {% trans 'Send mail' %}
+                    </button>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

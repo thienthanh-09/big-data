@@ -44,36 +44,49 @@
                     </a>
                 </li>
             </ul>
-            <div class="row justify-content-end align-items-center">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+                </ul>
                 {% if user.is_authenticated %}
-                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Cart' %}">
-                    <a href="{% url 'cart' %}" class="text-decoration-none text-dark">
-                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <div class="row d-flex justify-content-end">
+                    <a name="" id="" class="btn mt-1 col-auto" href="/chat/" role="button">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
                     </a>
-                </div>
-                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Notification' %}">
-                    <a href="{% url 'notification' %}" class="text-decoration-none text-dark">
-                        <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                    <a name="" id="" class="btn position-relative mt-1 col-auto" href="/me/cart/" role="button">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="cart-size">
+                            {{cart_size|default:'0'}}
+                        </span>
                     </a>
-                </div>
-                <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Account' %}">
-                    <div class="dropdown">
-                        <i class="fa fa-user" data-bs-toggle="dropdown" aria-hidden="true"></i>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/chat/">
-                                {% trans 'Chat' %}
-                            </a></li>
+                    <a name="" id="" class="btn position-relative mt-1 col-auto" href="/me/notification/" role="button">
+                        <i class="fa-solid fa-bell"></i>
+                        {% if noti %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="noti-size">
+                            {{noti_size|default:'0'}}
+                        </span>
+                        {% endif %}
+                    </a>
+                    <div class="col-auto mt-1" style="position: relative;">
+                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{user.profile.avatar.url}}" class="border me-1" width="30" height="30" alt="">
+                            {{user.username}}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="z-index: 2000;">
                             <li><a class="dropdown-item" href="/me/store/">
-                                {% trans 'Store Dashboard' %}
+                                {% trans 'My store' %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{% url 'account' %}">
+                            <li><a class="dropdown-item" href="/account/">
                                 {% trans 'Account' %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{% url 'order_history' %}">
-                                {% trans 'History' %}
+                            <li><a class="dropdown-item" href="/history/">
+                                {% trans 'Order history' %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{% url 'favorite_product' %}">
-                                {% trans 'Favorite' %}
+                            <li><a class="dropdown-item" href="/favorite/">
+                                {% trans 'Liked products' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="/account/change-password/">
+                                {% trans 'Change password' %}
                             </a></li>
                             <li><a class="dropdown-item" href="/logout/">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -83,15 +96,12 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="col-auto">
-                    <a href="{% url 'login' %}" role="button" class="text-dark">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </a>
-                </div>
+                    <a name="" id="" class="btn btn-primary text-dark" href="/login/" role="button" style="background-color: #ffd166; border: none; margin-right: 1%">{% trans 'Login' %}</a>
                 {% endif %}
+
                 <div class="col-auto" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% trans 'Settings' %}">
                     <div class="dropdown">
-                        <i class="fa fa-sliders" data-bs-toggle="dropdown" aria-hidden="true"></i>
+                        <i class="fas fa-cog" data-bs-toggle="dropdown" aria-hidden="true"></i>
                         <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 20rem;">
                             <div class="row mb-2">
                                 {% include 'components/change_language_form.html' %}
