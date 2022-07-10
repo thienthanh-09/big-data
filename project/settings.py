@@ -36,8 +36,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
     'channels',
+    'whitenoise.runserver_nostatic',
     'store',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'emoji',
     'django_extensions',
     'django_pdb',
+    
 ]
 
 SITE_ID = 2

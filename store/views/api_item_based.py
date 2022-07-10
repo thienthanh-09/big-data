@@ -2,7 +2,7 @@ import math
 import numpy as np 
 import pandas as pd
 
-rating = pd.read_csv ('I:\project\scripts/1665_ds.204_Comment.csv')
+rating = pd.read_csv ('N:\GoldenOwl\FinalAssigment/source-ds204/scripts/1665_ds.204_Comment.csv')
 
 X_train = rating
 

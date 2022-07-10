@@ -110,7 +110,7 @@ class MyStoreView(LoginRequiredMixin, TemplateView):
             context['query_' + query] = self.request.GET.get(query, '')
             print(context['query_' + query])
         context['pending_count'] = Order.objects.filter(store=self.request.user.store, status='Pending').count()
-        rating = pd.read_csv('I:\project\scripts/1665_ds.204_Comment.csv', index_col=0) 
+        rating = pd.read_csv('N:\GoldenOwl\FinalAssigment/source-ds204/scripts/1665_ds.204_Comment.csv', index_col=0) 
         X_train = rating
 
         df = pd.pivot_table(

@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <a class="navbar-brand text-decoration-none" href="/">
             <i class="fa-solid fa-store"></i>
-            Store
+            Shoppii
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -50,23 +50,23 @@
                 </ul>
                 {% if user.is_authenticated %}
                 <div class="row d-flex justify-content-end">
-                    <a name="" id="" class="btn mt-1 col-auto" href="/chat/" role="button">
+                    {% comment %} <a name="" id="" class="btn mt-1 col-auto" href="/chat/" role="button">
                         <i class="fa fa-comment" aria-hidden="true"></i>
-                    </a>
+                    </a> {% endcomment %}
                     <a name="" id="" class="btn position-relative mt-1 col-auto" href="/me/cart/" role="button">
                         <i class="fa-solid fa-cart-shopping"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="cart-size">
                             {{cart_size|default:'0'}}
                         </span>
                     </a>
-                    <a name="" id="" class="btn position-relative mt-1 col-auto" href="/me/notification/" role="button">
+                    {% comment %} <a name="" id="" class="btn position-relative mt-1 col-auto" href="/me/notification/" role="button">
                         <i class="fa-solid fa-bell"></i>
                         {% if noti %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="noti-size">
                             {{noti_size|default:'0'}}
                         </span>
                         {% endif %}
-                    </a>
+                    </a> {% endcomment %}
                     <div class="col-auto mt-1" style="position: relative;">
                         <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{user.profile.avatar.url}}" class="border me-1" width="30" height="30" alt="">
