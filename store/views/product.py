@@ -41,7 +41,7 @@ class Home(TemplateView):
         r_ids = [i['product'] for i in r]
         # context['most_viewed_products'] = Product.objects.filter(available=True).select_related('category').select_related('sale').order_by('-view')[:8]
 
-        rating = pd.read_csv('N:\GoldenOwl\FinalAssigment/source-ds204/scripts/1665_ds.204_Comment.csv', index_col=0)
+        rating = pd.read_csv('scripts/1665_ds.204_Comment.csv', index_col=0)
 
         rating_grouped = rating.groupby('product_id').agg({'rate': 'sum'}).reset_index()
         rating_grouped.rename(columns = {'rate': 'Total_score'},inplace=True)
@@ -244,7 +244,7 @@ class ProductDetail(ListView):
         context['images'] = context['object'].productimage_set.all()
         context['videos'] = context['object'].productvideo_set.all()
         # context['related_products'] = Product.objects.filter(content_based=product.content_based, available=True).exclude(id=product.id)[:8]
-        product_data = pd.read_csv('N:\GoldenOwl\FinalAssigment\source-ds204\scripts\89_ds.204_Product.csv')
+        product_data = pd.read_csv('scripts\89_ds.204_Product.csv')
 
         # Function to process data
         def pre_processing(text):

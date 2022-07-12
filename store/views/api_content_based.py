@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 # from ..models import Product
 # import random
 
-product_data = pd.read_csv('I:\project\scripts\89_ds.204_Product.csv')
+product_data = pd.read_csv('scripts\89_ds.204_Product.csv')
 
 # Function to process data
 def pre_processing(text):

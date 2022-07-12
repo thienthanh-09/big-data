@@ -1,34 +1,20 @@
-import numpy as np
-import pandas as pd
-import math
+import pyspark
+from pyspark.sql import SparkSession
+import pyspark.sql.functions as f
+import pyspark.sql.types as t
+from pyspark.ml import Pipeline
+spark = SparkSession.builder.getOrCreate()
 
-rating = pd.read_csv ('I:/project/scripts/1665_ds.204_Comment.csv', index_col=0)
-rating_grouped = rating.groupby('product_id').agg({'rate': 'sum'}).reset_index()
-rating_grouped.rename(columns = {'rate': 'Total_score'},inplace=True)
-most_rating = rating_grouped.sort_values(['Total_score', 'product_id'], ascending = [0,1]) 
-most_rating['Rank'] = most_rating['Total_score'].rank(ascending=0, method='first') 
-        
-def recommend_popular_product(user_id):     
-    user_recommendations = most_rating 
-    user_recommendations['UserId'] = user_id 
-    cols = user_recommendations.columns.tolist() 
-    cols = cols[-1:] + cols[:1] 
-    user_recommendations = user_recommendations[cols] 
-    return user_recommendations[:50]
+ratingdemo_schema = "id int, subject string, review string, label float, status string, item_id int, user_id int, created_at string, updated_at string"
+ratingdemo = spark.read.csv('scripts/1665_ds.204_Comment.csv', schema=ratingdemo_schema, header=True).select('item_id', 'user_id', 'label')
 
-cold_start = recommend_popular_product(1)
-cold_start_list = cold_start.iloc[:,1].values.tolist()
-# print(cold_start_list)
+avg_groupdemo = ratingdemo.groupby('item_id').agg(f.mean('label').alias('avg_score'))
+total_groupdemo = ratingdemo.groupby('item_id').agg(f.sum('label').alias('total_score')).withColumnRenamed('item_id', 'temp')
 
-cold_start = recommend_popular_product(1)
-cold_start_list = cold_start.iloc[:,1].values.tolist()
-cold_start_list = cold_start_list[0:10]
+groupdemo = avg_groupdemo.join(total_groupdemo, total_groupdemo.temp == avg_groupdemo.item_id, "inner").select('item_id', 'avg_score', 'total_score')
 
-# my_filter_cold_start = Q()
-# for cold_start in cold_start_list:
-#     my_filter_cold_start = my_filter_cold_start | Q(id=cold_start)
+from pyspark.sql.functions import *
+rankeddemo =  groupdemo.orderBy(desc("avg_score"), desc("total_score"))
 
-# context['recommended_products'] = Product.objects.filter(my_filter_cold_start)[:16]
-# for product in context['recommended_products']:
-#     product.favorited = product.id in favorited_products 
-# return context
+list_popular = rankeddemo.select('item_id').limit(20).rdd.flatMap(lambda x: x).collect()
+print(list_popular)
