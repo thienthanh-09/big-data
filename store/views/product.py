@@ -63,6 +63,7 @@ class Home(TemplateView):
         cold_start = recommend_popular_product(1)
         cold_start_list = cold_start.iloc[:,1].values.tolist()
         cold_start_list = cold_start_list[0:10]
+        cold_start_list = [69, 39, 13, 1, 49, 62, 8, 40, 27, 23, 11, 50, 32, 86, 88, 66, 16, 64, 31, 51]
 
         X_train = rating
         # Pivot table 
@@ -143,7 +144,7 @@ class Home(TemplateView):
 
         user = self.request.user
         if not user.is_authenticated:
-            context['recommended_products'] = Product.objects.filter(my_filter_cold_start)[:16]
+            context['recommended_products'] = Product.objects.filter(my_filter_cold_start)[:20]
             for product in context['recommended_products']:
                 product.favorited = product.id in favorited_products 
             return context
@@ -244,55 +245,61 @@ class ProductDetail(ListView):
         context['images'] = context['object'].productimage_set.all()
         context['videos'] = context['object'].productvideo_set.all()
         # context['related_products'] = Product.objects.filter(content_based=product.content_based, available=True).exclude(id=product.id)[:8]
-        product_data = pd.read_csv('scripts\89_ds.204_Product.csv')
+        # product_data = pd.read_csv('scripts\89_ds.204_Product.csv')
+        product_data = pd.read_csv('scripts\mock_content_based.csv')
+        # prod_data = pd.read_csv('scripts\mock_content_based.csv')
 
-        # Function to process data
-        def pre_processing(text):
-            text = text.lower() # lowercase
-            text = re.sub('<.*?>', '', text) # Remove html tag,...
-            text = re.sub(r'[^\w\s]', '', text) # Remove punctuation
-            text = text.split(' ')
-            stops = set(stopwords.words('english'))
-            text = [w for w in text if not w in stops]
-            text = ' '.join(text)
-            return text
+        # # Function to process data
+        # def pre_processing(text):
+        #     text = text.lower() # lowercase
+        #     text = re.sub('<.*?>', '', text) # Remove html tag,...
+        #     text = re.sub(r'[^\w\s]', '', text) # Remove punctuation
+        #     text = text.split(' ')
+        #     stops = set(stopwords.words('english'))
+        #     text = [w for w in text if not w in stops]
+        #     text = ' '.join(text)
+        #     return text
 
-        product_data["description"] = product_data["description"].astype(str)
+        # product_data["description"] = product_data["description"].astype(str)
 
-        for i in range(len(product_data)):
-            product_data["description"].iloc[i] =  pre_processing(product_data["description"].iloc[i])
+        # for i in range(len(product_data)):
+        #     product_data["description"].iloc[i] =  pre_processing(product_data["description"].iloc[i])
 
-        product_data = product_data.dropna()
+        # product_data = product_data.dropna()
 
-        # Calculate TF/IDF
-        vectorizer = TfidfVectorizer(stop_words="english")
-        tfidf_vectorizer = vectorizer.fit(product_data["description"])
-        overview_matrix = tfidf_vectorizer.transform(product_data["description"])
+        # # Calculate TF/IDF
+        # vectorizer = TfidfVectorizer(stop_words="english")
+        # tfidf_vectorizer = vectorizer.fit(product_data["description"])
+        # overview_matrix = tfidf_vectorizer.transform(product_data["description"])
 
-        # Calculate similarity matrix
-        similarity_matrix = linear_kernel(overview_matrix, overview_matrix)
+        # # Calculate similarity matrix
+        # similarity_matrix = linear_kernel(overview_matrix, overview_matrix)
 
-        def get_asin(productid):
-            return product_data['asin'].iloc[productid]
+        # def get_asin(productid):
+        #     return product_data['asin'].iloc[productid]
 
-        def recommend_product_based_on_description(product_input):
-            # Calculate similarity score
-            similarity_score = list(enumerate(similarity_matrix[product_input]))
-            similarity_score = sorted(similarity_score, key = lambda x: x[1], reverse = True)
-            similarity_score = similarity_score[1:]
-            recommendations = [(productid, score) for productid, score in similarity_score]
-            return recommendations
+        # def recommend_product_based_on_description(product_input):
+        #     # Calculate similarity score
+        #     similarity_score = list(enumerate(similarity_matrix[product_input]))
+        #     similarity_score = sorted(similarity_score, key = lambda x: x[1], reverse = True)
+        #     similarity_score = similarity_score[1:]
+        #     recommendations = [(productid, score) for productid, score in similarity_score]
+        #     return recommendations
 
         product = Product.objects.get(id=self.kwargs['pk'])
         input = product.id
 
-        result = recommend_product_based_on_description(input)
-        content_based_list = [i[0] for i in result if i[1] > 0]
+        # result = recommend_product_based_on_description(input)
+        # content_based_list = [i[0] for i in result if i[1] > 0]
+        content_based_list =product_data.list_product[input-1]
+        content_based_list = content_based_list.strip('[]')
+        content_based_list = content_based_list.split(', ')
+            
 
         my_filter_content_based = Q()
         for content_based in content_based_list:
             my_filter_content_based = my_filter_content_based | Q(id=content_based)
-        context['related_products'] = Product.objects.filter(my_filter_content_based)[:12]
+        context['related_products'] = Product.objects.filter(my_filter_content_based)[:20]
         return context
 
     def can_comment(self):

@@ -1,53 +1,84 @@
-import numpy as np
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as f
+
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import linear_kernel
-import re
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
-# from ..models import Product
-# import random
+from IPython.core.display import display
+import seaborn as sns
 
-product_data = pd.read_csv('scripts\89_ds.204_Product.csv')
+spark = SparkSession.builder.config("spark.executor.memory", "4g").getOrCreate()
 
-# Function to process data
-def pre_processing(text):
-    text = text.lower() # lowercase
-    text = re.sub('<.*?>', '', text) # Remove html tag,...
-    text = re.sub(r'[^\w\s]', '', text) # Remove punctuation
-    text = text.split(' ')
-    stops = set(stopwords.words('english'))
-    text = [w for w in text if not w in stops]
-    text = ' '.join(text)
-    return text
+from pyspark.ml.feature import (StopWordsRemover, Tokenizer, HashingTF, IDF, CountVectorizer, StringIndexer, NGram, VectorAssembler, ChiSqSelector)
+from pyspark.ml.classification  import LogisticRegression, DecisionTreeClassifier, RandomForestClassifier
+from pyspark.ml import Pipeline
+from pyspark.ml.evaluation import RegressionEvaluator
+import time
 
-product_data["description"] = product_data["description"].astype(str)
+tokenizer = Tokenizer(inputCol="description", outputCol="words1")
+stopword_remover = StopWordsRemover(
+    inputCol="words1",
+    outputCol= "words2",
+    stopWords= StopWordsRemover.loadDefaultStopWords("english")
+)
+hashing_tf = HashingTF(inputCol="words2", outputCol="term_frequency")
+idf= IDF(inputCol="term_frequency", outputCol="features", minDocFreq=5)
+lr = LogisticRegression(labelCol="label", featuresCol="features", regParam=0.2)
+pipe =  Pipeline(
+    stages=[tokenizer, stopword_remover, hashing_tf, idf, lr]
+)
 
-for i in range(len(product_data)):
-    product_data["description"].iloc[i] =  pre_processing(product_data["description"].iloc[i])
+ratingdemo_schema = "id int, subject string, review string, label float, status string, item_id int, user_id int, created_at string, updated_at string"
+ratingdemo = spark.read.csv('/content/drive/MyDrive/Recommender System on E-commerce platform/BigData/data/Rating_Demo.csv', schema=ratingdemo_schema, header=True).select('item_id', 'user_id', 'label')
+print(ratingdemo.count())
+ratingdemo.show()
 
-product_data = product_data.dropna()
+productdemo_schema = "id int, name string, description string, thumbnail string, price float, quantity int, sold  int, available boolean, rating int, rating_count int, view int, slug string, category_id int, store_id int"
+productdemo = spark.read.csv('/content/drive/MyDrive/Recommender System on E-commerce platform/BigData/data/Product_Demo.csv', schema=productdemo_schema, header=True).select('id', 'description')
+print(productdemo.count())
+productdemo.show()
 
-# Calculate TF/IDF
-vectorizer = TfidfVectorizer(stop_words="english")
-tfidf_vectorizer = vectorizer.fit(product_data["description"])
-overview_matrix = tfidf_vectorizer.transform(product_data["description"])
+combinedemo = ratingdemo.join(productdemo, ratingdemo.item_id == productdemo.id, "inner").select('item_id', 'user_id', 'label', 'description')
+print(combinedemo.count())
+combinedemo.printSchema()
 
-# Calculate similarity matrix
-similarity_matrix = linear_kernel(overview_matrix, overview_matrix)
+user_regex = r"(@\w{1,15})"
+hashtag_replace_regex = "#(\w{1,})"
+url_regex = r"((https?|ftp|file):\/{2,3})+([-\w+&@#/%=~|$?!:,.]*)|(www.)+([-\w+&@#/%=~|$?!:,.]*)"
+email_regex = r"[\w.-]+@[\w.-]+\.[a-zA-Z]{1,}"
+number_regex = "[^a-zA-Z0-9]"
+space_regex = " +"
 
-def get_asin(productid):
-    return product_data['asin'].iloc[productid]
+df = (combinedemo.withColumn("description",f.regexp_replace(f.col("description"), user_regex, ""))
+                    .withColumn("description",f.regexp_replace(f.col("description"), hashtag_replace_regex, ""))
+                    .withColumn("description",f.regexp_replace(f.col("description"), url_regex, ""))
+                    .withColumn("description",f.regexp_replace(f.col("description"), email_regex, ""))
+                    .withColumn("description",f.regexp_replace(f.col("description"), number_regex, " "))
+                    .withColumn("description",f.regexp_replace(f.col("description"), space_regex, " "))
+                    .withColumn("description",f.trim(f.col("description")))
+                    .withColumn("description",f.lower(f.col("description")))
+                    .filter("description != ''")
+)
+print('Rows:', df.count())
+df.show()
 
-def recommend_product_based_on_description(product_input):
-    # Calculate similarity score
-    similarity_score = list(enumerate(similarity_matrix[product_input]))
-    similarity_score = sorted(similarity_score, key = lambda x: x[1], reverse = True)
-    similarity_score = similarity_score[1:]
-    recommendations = [(productid, score) for productid, score in similarity_score]
-    return recommendations
+model = pipe.fit(df)
 
-result = recommend_product_based_on_description(18)
-a = [i[0] for i in result if i[1] > 0]
-print(a)
+product_list = df.select('item_id', 'description').distinct().sort('item_id')
+print(product_list.count())
+product_list.show()
+
+def recommend_product(customer):
+    rated_product = df.filter(df.user_id == customer).select('item_id').rdd.flatMap(lambda x: x).collect()
+    not_rated = product_list.filter(~product_list.item_id.isin(rated_product)).withColumn('user_id', f.lit(customer))
+
+    get_recommend = model.transform(not_rated).select('user_id', 'item_id', 'prediction')
+    get_recommend1 = get_recommend.sort(get_recommend.prediction.desc())
+    
+    return get_recommend1
+
+recommend_product(20).show()
+
+# get list product cho em Thanh mặp
+def get_product_list(customer, num_of_product):
+    return recommend_product(customer).select('item_id').limit(num_of_product).rdd.flatMap(lambda x: x).collect()
+
+get_product_list(20,10)
